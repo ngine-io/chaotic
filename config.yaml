@@ -1,0 +1,8 @@
+---
+kind: nomad
+dry_run: true
+configs:
+  namespace_allowlist:
+    - example-prod
+  signals:
+    - SIGKILL
