@@ -9,14 +9,15 @@ Depending on the Cloud API used, it may kill allocations (Hashicorp Nomad), rebo
 Currently implemented Clouds:
 
 - cloudscale.ch
+- DigitalOcean
 - Hetzner Cloud
 - Hashicorp Nomad
 
 Planned:
 
 - Exoscale
+- CloudStack
 - Vultr
-- Digital Ocean
 
 ## Install
 
