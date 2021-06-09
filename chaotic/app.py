@@ -5,6 +5,7 @@ from chaotic.log import log
 from chaotic import ChaoticFactory
 
 def main() -> None:
+    log.info(f"Starting")
 
     try:
         config_file = os.getenv('CHAOTIC_CONFIG', 'config.yaml')

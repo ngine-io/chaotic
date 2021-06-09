@@ -30,7 +30,7 @@ class CloudscaleChChaotic(Chaotic):
                 log.info(f"Sleeping for server {wait_before_restart}")
                 time.sleep(wait_before_restart)
 
-                log.info(f"Starting server {wait_before_restart}")
+                log.info(f"Starting server {server['name']}")
                 self.cloudscale.server.start(uuid=server['uuid'])
         else:
             log.info("No servers found")
