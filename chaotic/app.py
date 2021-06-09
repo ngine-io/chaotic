@@ -11,8 +11,8 @@ def main() -> None:
     chaos_factory = ChaoticFactory()
     chaos = chaos_factory.get_instance(config['kind'])
     chaos.configure(
-        configs=config.get('configs', {}),
-        dry_run=config.get('dry_run', False)
+        configs=config.get('configs') or dict(),
+        dry_run=config.get('dry_run') or False
     )
     chaos.action()
 
