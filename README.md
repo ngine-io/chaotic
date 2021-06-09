@@ -75,6 +75,24 @@ configs:
   label: "chaos=enabled"
 ```
 
+### DigitalOcean Cloud
+
+Chaotic will stop a droplet selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).
+
+#### Config
+
+```
+export DIGITALOCEAN_ACCESS_TOKEN=...
+```
+
+```yaml
+---
+kind: digitalocean
+dry_run: false
+configs:
+  tag: "chaos:enabled"
+```
+
 ### Nomad
 
 Chaotic will send an allocation signal to an allocation in the available namespaces selected by an allow list.

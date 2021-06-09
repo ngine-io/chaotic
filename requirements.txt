@@ -3,3 +3,4 @@ python-dotenv
 requests
 cloudscale-sdk
 hcloud
+python-digitalocean

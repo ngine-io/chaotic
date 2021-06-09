@@ -1,0 +1,5 @@
+---
+kind: digitalocean
+dry_run: false
+configs:
+  tag: "chaos:enabled"
