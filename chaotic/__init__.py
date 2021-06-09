@@ -1,8 +1,10 @@
+from chaotic.cloud.cloudscale_ch import CloudscaleChChaotic
 from chaotic.cloud.nomad import NomadChaotic
 
 class ChaoticFactory:
 
     CLOUD_CLASSES: dict = {
+        'cloudscale_ch': CloudscaleChChaotic,
         'nomad': NomadChaotic,
     }
 

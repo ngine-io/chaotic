@@ -1,0 +1,5 @@
+---
+kind: cloudscale_ch
+dry_run: false
+configs:
+  filter_tag: "chaos=enabled"
