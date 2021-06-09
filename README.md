@@ -8,12 +8,12 @@ Depending on the Cloud API used, it may kill allocations (Hashicorp Nomad), rebo
 
 Currently implemented Clouds:
 
-- Hashicorp Nomad
 - cloudscale.ch
+- Hetzner Cloud
+- Hashicorp Nomad
 
 Planned:
 
-- Hetzner Cloud
 - Exoscale
 - Vultr
 - Digital Ocean
@@ -55,6 +55,24 @@ configs:
 # Optional, 60 seconds is the default
   wait_before_restart: 60
 
+```
+
+### Hetzner Cloud
+
+Chaotic will stop a server selected by an optional filter label and stop/start it with a delay of a configurable time (default 60s).
+
+#### Config
+
+```
+export HCLOUD_API_TOKEN=...
+```
+
+```yaml
+---
+kind: hcloud
+dry_run: false
+configs:
+  label: "chaos=enabled"
 ```
 
 ### Nomad

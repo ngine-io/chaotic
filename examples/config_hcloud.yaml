@@ -1,0 +1,5 @@
+---
+kind: hcloud
+dry_run: false
+configs:
+  label: "chaos=enabled"

@@ -2,3 +2,4 @@ pyyaml
 python-dotenv
 requests
 cloudscale-sdk
+hcloud
