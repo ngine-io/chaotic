@@ -46,14 +46,14 @@ export CLOUDSCALE_API_TOKEN="..."
 
 ```yaml
 ---
-kind: cloudscale.ch
+kind: cloudscale_ch
 dry_run: true
 configs:
 
   # Optional server tag filter
   filter_tag: "chaos=opt-in"
 
-# Optional, 60 seconds is the default
+  # Optional, 60 seconds is the default
   wait_before_restart: 60
 
 ```
