@@ -1,8 +1,10 @@
+from chaotic.cloud.vultr import VultrChaotic
 from chaotic.cloud.cloudscale_ch import CloudscaleChChaotic
 from chaotic.cloud.digitalocean import DigitaloceanChaotic
 from chaotic.cloud.hcloud import HcloudChaotic
 from chaotic.cloud.nomad import NomadChaotic
 from chaotic.log import log
+
 
 class ChaoticFactory:
 
@@ -11,6 +13,7 @@ class ChaoticFactory:
         'hcloud': HcloudChaotic,
         'nomad': NomadChaotic,
         'digitalocean': DigitaloceanChaotic,
+        'vultr': VultrChaotic,
     }
 
     def get_instance(self, name: str) -> object:

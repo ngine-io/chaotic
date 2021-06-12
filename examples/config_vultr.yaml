@@ -1,0 +1,5 @@
+---
+kind: vultr
+dry_run: true
+configs:
+  tag: "chaos=enabled"

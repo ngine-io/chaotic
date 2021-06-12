@@ -12,12 +12,12 @@ Currently implemented Clouds:
 - DigitalOcean
 - Hetzner Cloud
 - Hashicorp Nomad
+- Vultr
 
 Planned:
 
 - Exoscale
 - CloudStack
-- Vultr
 
 ## Install
 
@@ -31,6 +31,28 @@ Create a file named `config.yaml` or use the env var `CHAOTIC_CONFIG` to point t
 
 ```
 export CHAOTIC_CONFIG=config_nomad.yaml
+```
+
+### Vultr
+
+Chaotic will stop a server selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).
+
+```
+export VULTR_API_KEY="..."
+```
+
+```yaml
+---
+kind: vultr
+dry_run: true
+configs:
+
+  # Optional instance tag filter
+  tag: "chaos=opt-in"
+
+  # Optional, 60 seconds is the default
+  wait_before_restart: 60
+
 ```
 
 ### Cloudscale.ch
