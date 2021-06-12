@@ -19,7 +19,7 @@ Currently implemented Clouds:
 ## Install
 
 ```
-pip3 install https://github.com/ngine-io/chaotic/archive/master.zip
+pip3 install -U chaotic-ngine
 ```
 
 ## Configure
