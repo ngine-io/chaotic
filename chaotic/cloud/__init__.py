@@ -1,6 +1,7 @@
+from abc import ABC, abstractmethod
 from chaotic.log import log
 
-class Chaotic():
+class Chaotic(ABC):
 
     def configure(self, configs: dict, dry_run: bool) -> None:
         self.configs = configs
@@ -8,5 +9,6 @@ class Chaotic():
         if self.dry_run:
             log.info(f"Running in dry-run")
 
+    @abstractmethod
     def action(self) -> None:
-        raise NotImplementedError
+        pass
