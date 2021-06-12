@@ -1,0 +1,7 @@
+---
+kind: cloudstack
+dry_run: true
+configs:
+  tag:
+    key: chaos
+    value: enabled
