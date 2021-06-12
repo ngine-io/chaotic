@@ -49,11 +49,7 @@ configs:
     key: chaos
     value: enabled
 
-<<<<<<< Updated upstream
   # Optional, 60 seconds is the default
-=======
-# Optional, 60 seconds is the default
->>>>>>> Stashed changes
   wait_before_restart: 60
 
 ```
