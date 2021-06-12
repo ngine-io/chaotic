@@ -13,9 +13,6 @@ Currently implemented Clouds:
 - Hetzner Cloud
 - Hashicorp Nomad
 - Vultr
-
-Planned:
-
 - Exoscale
 - CloudStack
 
@@ -31,6 +28,61 @@ Create a file named `config.yaml` or use the env var `CHAOTIC_CONFIG` to point t
 
 ```
 export CHAOTIC_CONFIG=config_nomad.yaml
+```
+### Exoscale
+
+Chaotic will stop a server selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).
+
+```
+export EXOSCALE_API_KEY="..."
+export EXOSCALE_API_SECRET="..."
+```
+
+```yaml
+---
+kind: exoscale
+dry_run: false
+configs:
+
+  # Optional, filter tag
+  tag:
+    key: chaos
+    value: enabled
+
+<<<<<<< Updated upstream
+  # Optional, 60 seconds is the default
+=======
+# Optional, 60 seconds is the default
+>>>>>>> Stashed changes
+  wait_before_restart: 60
+
+```
+
+### CloudStack
+
+Chaotic will stop a server selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).
+
+```
+export CLOUDSTACK_API_KEY="..."
+export CLOUDSTACK_API_SECRET="..."
+export CLOUDSTACK_API_ENDPOINT="..."
+
+```
+
+```yaml
+---
+kind: cloudstack
+dry_run: false
+configs:
+
+  # Optional, filter tag
+  tag:
+    key: chaos
+    value: enabled
+
+  # Optional, 60 seconds is the default
+  wait_before_restart: 60
+
 ```
 
 ### Vultr
@@ -95,7 +147,12 @@ export HCLOUD_API_TOKEN=...
 kind: hcloud
 dry_run: false
 configs:
+
+  # Optional server label filter
   label: "chaos=enabled"
+
+  # Optional, 60 seconds is the default
+  wait_before_restart: 60
 ```
 
 ### DigitalOcean Cloud
@@ -113,7 +170,12 @@ export DIGITALOCEAN_ACCESS_TOKEN=...
 kind: digitalocean
 dry_run: false
 configs:
+
+  # Optional droplet tag filter
   tag: "chaos:enabled"
+
+  # Optional, 60 seconds is the default
+  wait_before_restart: 60
 ```
 
 ### Nomad

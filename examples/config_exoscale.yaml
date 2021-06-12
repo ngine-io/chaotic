@@ -1,0 +1,7 @@
+---
+kind: exoscale
+dry_run: false
+configs:
+  tag:
+    key: chaos
+    value: enabled
