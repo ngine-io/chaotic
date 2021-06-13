@@ -26,7 +26,7 @@ class DigitaloceanChaotic(Chaotic):
                 droplet.shutdown()
 
                 wait_before_restart = int(self.configs.get('wait_before_restart', 60))
-                log.info(f"Sleeping for server {wait_before_restart}")
+                log.info(f"Sleeping for {wait_before_restart} seconds")
                 time.sleep(wait_before_restart)
 
                 log.info(f"Starting server {droplet.name}")

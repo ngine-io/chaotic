@@ -20,7 +20,6 @@ class CloudStackChaotic(Chaotic):
             secret=CLOUDSTACK_API_SECRET,
         )
 
-
     def action(self) -> None:
         tag = self.configs.get('tag')
         log.info(f"Querying with tag: {tag['key']}={tag['value']}")
@@ -36,7 +35,7 @@ class CloudStackChaotic(Chaotic):
                 log.info(f"Stopping server {instance['name']}")
                 self.cs.stopVirtualMachine(id=instance['id'])
                 wait_before_restart = int(self.configs.get('wait_before_restart', 60))
-                log.info(f"Sleeping for server {wait_before_restart}")
+                log.info(f"Sleeping for {wait_before_restart} seconds")
                 time.sleep(wait_before_restart)
 
                 log.info(f"Starting server {instance['name']}")
