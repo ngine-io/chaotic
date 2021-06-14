@@ -1,6 +1,19 @@
 ---
 kind: nomad
 dry_run: true
+excludes:
+  weekdays:
+    - Sun
+    - Sat
+  times_of_day:
+    - 22:00-08:00
+    - 11:00-14:00
+  days_of_year:
+    - Jan01
+    - Apr01
+    - May01
+    - Aug01
+    - Dec24
 configs:
   namespace_allowlist:
     - example-prod
