@@ -1,3 +1,9 @@
+![license](https://img.shields.io/pypi/l/chaotic-ngine.svg)
+![python versions](https://img.shields.io/pypi/pyversions/chaotic-ngine.svg)
+![status](https://img.shields.io/pypi/status/chaotic-ngine.svg)
+[![pypi version](https://img.shields.io/pypi/v/chaotic-ngine.svg)](https://pypi.org/project/chaotic-ngine/)
+![PyPI - Downloads](https://img.shields.io/pypi/dw/chaotic-ngine)
+
 # Chaotic - Chaos for Clouds
 
 Chaotic evaluates a plan, how it will bring chaos in your Cloud environment.
@@ -34,7 +40,9 @@ export CHAOTIC_CONFIG=config_nomad.yaml
 
 Define times when the bot should not doing real actions (it will run in dry-run):
 
-```
+```yaml
+---
+kind: ...
 excludes:
   weekdays:
     - Sun
@@ -72,7 +80,6 @@ configs:
 
   # Optional, 60 seconds is the default
   wait_before_restart: 60
-
 ```
 
 ### CloudStack
@@ -83,7 +90,6 @@ Chaotic will stop a server selected by an optional filter tag and stop/start it 
 export CLOUDSTACK_API_KEY="..."
 export CLOUDSTACK_API_SECRET="..."
 export CLOUDSTACK_API_ENDPOINT="..."
-
 ```
 
 ```yaml
@@ -99,7 +105,6 @@ configs:
 
   # Optional, 60 seconds is the default
   wait_before_restart: 60
-
 ```
 
 ### Vultr
@@ -121,7 +126,6 @@ configs:
 
   # Optional, 60 seconds is the default
   wait_before_restart: 60
-
 ```
 
 ### Cloudscale.ch
@@ -146,7 +150,6 @@ configs:
 
   # Optional, 60 seconds is the default
   wait_before_restart: 60
-
 ```
 
 ### Hetzner Cloud
