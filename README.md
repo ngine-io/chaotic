@@ -29,6 +29,27 @@ Create a file named `config.yaml` or use the env var `CHAOTIC_CONFIG` to point t
 ```
 export CHAOTIC_CONFIG=config_nomad.yaml
 ```
+
+### Exclude times
+
+Define times when the bot should not doing real actions (it will run in dry-run):
+
+```
+excludes:
+  weekdays:
+    - Sun
+    - Sat
+  times_of_day:
+    - 22:00-08:00
+    - 11:00-14:00
+  days_of_year:
+    - Jan01
+    - Apr01
+    - May01
+    - Aug01
+    - Dec24
+  ```
+
 ### Exoscale
 
 Chaotic will stop a server selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).

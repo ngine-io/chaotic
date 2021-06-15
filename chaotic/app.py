@@ -16,7 +16,8 @@ def main() -> None:
         chaos = chaos_factory.get_instance(config['kind'])
         chaos.configure(
             configs=config.get('configs') or dict(),
-            dry_run=config.get('dry_run') or False
+            dry_run=config.get('dry_run') or False,
+            excludes=config.get('excludes') or dict(),
         )
         chaos.action()
     except Exception as ex:
