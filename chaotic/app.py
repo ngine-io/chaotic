@@ -1,4 +1,5 @@
 import os
+import sys
 import yaml
 from chaotic.log import log
 
@@ -12,6 +13,12 @@ def main() -> None:
         with open(config_file, "r") as infile:
             config = yaml.load(infile, Loader=yaml.FullLoader)
 
+        if not config:
+            raise Exception("Empty config file")
+
+        if 'kind' not in config:
+            raise Exception("No kind defined")
+
         chaos_factory = ChaoticFactory()
         chaos = chaos_factory.get_instance(config['kind'])
         chaos.configure(
@@ -22,6 +29,7 @@ def main() -> None:
         chaos.action()
     except Exception as ex:
         log.error(ex)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
