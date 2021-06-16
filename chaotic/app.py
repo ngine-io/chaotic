@@ -2,11 +2,12 @@ import os
 import sys
 import yaml
 from chaotic.log import log
+from chaotic.version import __version__
 
 from chaotic import ChaoticFactory
 
 def main() -> None:
-    log.info(f"Starting")
+    log.info(f"Starting version {__version__}")
 
     try:
         config_file = os.getenv('CHAOTIC_CONFIG', 'config.yaml')
