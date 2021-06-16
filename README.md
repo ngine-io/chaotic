@@ -222,6 +222,10 @@ configs:
   namespace_allowlist:
     - example-prod
     - foobar-prod
+
+  # Optional: namespace denylist
+  namespace_denylist:
+    - default
 ```
 
 ## Run

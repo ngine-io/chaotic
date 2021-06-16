@@ -48,6 +48,13 @@ class Nomad:
         }
         self.query_api('post', f'client/allocation/{alloc_id}/signal', json=json)
 
+    def list_namespaces(self, prefix: str = None) -> List[dict]:
+        params = {
+            'prefix': prefix,
+        }
+        r = self.query_api('get', 'namespaces', params=params)
+        return r.json()
+
 
 class NomadChaotic(Chaotic):
 
@@ -63,8 +70,17 @@ class NomadChaotic(Chaotic):
         if NOMAD_NAMESPACE:
             namespace = NOMAD_NAMESPACE
         else:
+            namespaces = [ns['Name'] for ns in self.nomad.list_namespaces()]
+
             allowed_ns = self.configs.get('namespace_allowlist')
-            namespace = random.choice(allowed_ns) if allowed_ns else None
+            if allowed_ns is not None:
+                namespaces = [ns for ns in namespaces if ns in allowed_ns]
+
+            denied_ns = self.configs.get('namespace_denylist')
+            if denied_ns is not None:
+                namespaces = [ns for ns in namespaces if ns not in denied_ns]
+
+            namespace = random.choice(namespaces)
 
         log.info(f"Selected namespace: {namespace}")
         return namespace

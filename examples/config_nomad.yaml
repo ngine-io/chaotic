@@ -15,7 +15,7 @@ excludes:
     - Aug01
     - Dec24
 configs:
-  namespace_allowlist:
-    - example-prod
+  namespace_denylist:
+    - default
   signals:
     - SIGKILL
