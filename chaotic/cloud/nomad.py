@@ -7,7 +7,6 @@ from chaotic.cloud import Chaotic
 from chaotic.log import log
 
 NOMAD_ADDR: str = os.getenv('NOMAD_ADDR')
-NOMAD_NAMESPACE: str = os.getenv('NOMAD_NAMESPACE')
 NOMAD_TOKEN: str = os.getenv('NOMAD_TOKEN')
 NOMAD_HTTP_AUTH: str = os.getenv('NOMAD_HTTP_AUTH')
 
@@ -67,20 +66,17 @@ class NomadChaotic(Chaotic):
         )
 
     def _get_namespace(self) -> str:
-        if NOMAD_NAMESPACE:
-            namespace = NOMAD_NAMESPACE
-        else:
-            namespaces = [ns['Name'] for ns in self.nomad.list_namespaces()]
+        namespaces = [ns['Name'] for ns in self.nomad.list_namespaces()]
 
-            allowed_ns = self.configs.get('namespace_allowlist')
-            if allowed_ns is not None:
-                namespaces = [ns for ns in namespaces if ns in allowed_ns]
+        allowed_ns = self.configs.get('namespace_allowlist')
+        if allowed_ns is not None:
+            namespaces = [ns for ns in namespaces if ns in allowed_ns]
 
-            denied_ns = self.configs.get('namespace_denylist')
-            if denied_ns is not None:
-                namespaces = [ns for ns in namespaces if ns not in denied_ns]
+        denied_ns = self.configs.get('namespace_denylist')
+        if denied_ns is not None:
+            namespaces = [ns for ns in namespaces if ns not in denied_ns]
 
-            namespace = random.choice(namespaces)
+        namespace = random.choice(namespaces)
 
         log.info(f"Selected namespace: {namespace}")
         return namespace
