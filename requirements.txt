@@ -5,3 +5,4 @@ cloudscale-sdk
 hcloud
 python-digitalocean
 cs
+schedule
