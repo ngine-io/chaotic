@@ -16,7 +16,7 @@ from chaotic import ChaoticFactory
 def app() -> None:
     print("")
     try:
-        config: str
+        config: dict = dict()
         config_source: str= os.getenv('CHAOTIC_CONFIG', 'config.yaml')
 
         if config_source.startswith("http"):
@@ -77,6 +77,7 @@ def main() -> None:
         try:
             run_periodic(args.interval)
         except KeyboardInterrupt:
+            print("")
             log.info(f"Stopping...")
             schedule.clear()
             log.info(f"done")
