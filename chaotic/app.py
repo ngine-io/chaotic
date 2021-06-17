@@ -1,9 +1,12 @@
 import os
 import sys
+from requests.models import Response
 import yaml
+import json
 import time
 import schedule
-import argparse
+from argparse import ArgumentParser
+import requests
 
 from chaotic.log import log
 from chaotic.version import __version__
@@ -13,9 +16,25 @@ from chaotic import ChaoticFactory
 def app() -> None:
     print("")
     try:
-        config_file = os.getenv('CHAOTIC_CONFIG', 'config.yaml')
-        with open(config_file, "r") as infile:
-            config = yaml.load(infile, Loader=yaml.FullLoader)
+        config: str
+        config_source: str= os.getenv('CHAOTIC_CONFIG', 'config.yaml')
+
+        if config_source.startswith("http"):
+            res: Response = requests.get(
+                url=config_source,
+            )
+            res.raise_for_status()
+            config = res.json()
+
+        elif config_source.endswith(('.yaml', '.yml')):
+            with open(config_source, "r") as infile:
+                config = yaml.load(infile, Loader=yaml.FullLoader)
+                infile.close()
+
+        elif config_source.endswith('json'):
+            with open(config_source, "r") as infile:
+                config = json.load(infile)
+                infile.close()
 
         if not config:
             raise Exception("Empty config file")
@@ -23,7 +42,7 @@ def app() -> None:
         if 'kind' not in config:
             raise Exception("No kind defined")
 
-        chaos_factory = ChaoticFactory()
+        chaos_factory: ChaoticFactory = ChaoticFactory()
         chaos = chaos_factory.get_instance(config['kind'])
         chaos.configure(
             configs=config.get('configs') or dict(),
@@ -49,7 +68,7 @@ def run_periodic(interval: int = 1) -> None:
 def main() -> None:
     log.info(f"Starting version {__version__}")
 
-    parser = argparse.ArgumentParser()
+    parser: ArgumentParser = ArgumentParser()
     parser.add_argument("--periodic", help="Run periodic", action="store_true")
     parser.add_argument("--interval", help="Interval in minutes", type=int, default=1)
     args = parser.parse_args()
