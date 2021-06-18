@@ -17,7 +17,7 @@ def app() -> None:
     print("")
     try:
         config: dict = dict()
-        config_source: str= os.getenv('CHAOTIC_CONFIG', 'config.yaml')
+        config_source: str = os.getenv('CHAOTIC_CONFIG', 'config.yaml')
 
         if config_source.startswith("http"):
             res: Response = requests.get(
