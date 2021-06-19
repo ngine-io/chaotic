@@ -26,6 +26,8 @@ class CloudStackChaotic(Chaotic):
 
         instances = self.cs.listVirtualMachines(
             tags=[tag],
+            projectid=self.configs.get('projectid'),
+            zoneid=self.configs.get('zoneid'),
             fetch_list=True,
         )
         if instances:

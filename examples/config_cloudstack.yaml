@@ -5,3 +5,5 @@ configs:
   tag:
     key: chaos
     value: enabled
+  # zoneid: xyz
+  # projectid:
