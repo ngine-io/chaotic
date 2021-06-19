@@ -255,3 +255,7 @@ What you should see (cloudscale.ch):
 2021-06-09 09:02:26,955 - cloudscale.log:INFO:HTTP status code 204
 2021-06-09 09:02:26,956 - chatic:INFO:done
 ```
+
+## Docker / Nomad run
+
+See https://gitlab.com/ngine/docker-images/chaotic
