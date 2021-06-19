@@ -66,12 +66,17 @@ def run_periodic(interval: int = 1) -> None:
         time.sleep(1)
 
 def main() -> None:
-    log.info(f"Starting version {__version__}")
-
     parser: ArgumentParser = ArgumentParser()
-    parser.add_argument("--periodic", help="Run periodic", action="store_true")
-    parser.add_argument("--interval", help="Interval in minutes", type=int, default=1)
+    parser.add_argument("--periodic", help="run periodic", action="store_true")
+    parser.add_argument("--interval", help="set interval in minutes", type=int, default=1)
+    parser.add_argument("--version", help="show version", action="store_true")
     args = parser.parse_args()
+
+    if args.version:
+        print(f"version {__version__}")
+        sys.exit(0)
+
+    log.info(f"Starting version {__version__}")
 
     if args.periodic:
         try:
