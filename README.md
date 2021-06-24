@@ -34,7 +34,7 @@ pip3 install -U chaotic-ngine
 
 ## Configure
 
-Create a file named `config.yaml` or use the env var `CHAOTIC_CONFIG` to point to a config file:
+Create a file named `config.yaml` or use the env var `CHAOTIC_CONFIG` to point to a config file (also see the example directory):
 
 ```
 export CHAOTIC_CONFIG=config_nomad.yaml
