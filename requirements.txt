@@ -6,3 +6,4 @@ hcloud
 python-digitalocean
 cs
 schedule
+proxmoxer

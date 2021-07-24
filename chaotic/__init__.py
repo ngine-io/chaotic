@@ -4,6 +4,7 @@ from chaotic.cloud.digitalocean import DigitaloceanChaotic
 from chaotic.cloud.exoscale import ExoscaleChaotic
 from chaotic.cloud.hcloud import HcloudChaotic
 from chaotic.cloud.nomad import NomadChaotic
+from chaotic.cloud.proxmox_kvm import ProxmoxKvmChaotic
 from chaotic.cloud.vultr import VultrChaotic
 from chaotic.log import log
 
@@ -17,6 +18,7 @@ class ChaoticFactory:
         'exoscale': ExoscaleChaotic,
         'hcloud': HcloudChaotic,
         'nomad': NomadChaotic,
+        'proxmox_kvm': ProxmoxKvmChaotic,
         'vultr': VultrChaotic,
     }
 

@@ -1,0 +1,11 @@
+---
+kind: proxmox_kvm
+dry_run: false
+configs:
+
+  # Optional: Do not shutdown VMs having a lower uptime in minutes
+  min_uptime: 60
+
+  # Optional: Do not shutdown VMs in this name list
+  denylist:
+    - my-single-vm
