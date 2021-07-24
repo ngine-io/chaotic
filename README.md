@@ -18,13 +18,14 @@ Note: The config is re-read on every interval, no need to restart the service af
 
 Currently implemented Clouds:
 
-- cloudscale.ch
 - DigitalOcean
-- Hetzner Cloud
-- Hashicorp Nomad
 - Vultr
-- Exoscale
+- Hetzner Cloud
+- Proxmox KVM
 - CloudStack
+- Hashicorp Nomad
+- Exoscale
+- cloudscale.ch
 
 ## Install
 
@@ -230,6 +231,33 @@ configs:
   # Optional: namespace denylist
   namespace_denylist:
     - default
+```
+
+### Proxmox KVM
+
+Chaotic will stop a VM stop/start it with a delay of a configurable time (default 60s).
+
+```
+export PROXMOX_API_HOST="pve1.example.com"
+export PROXMOX_API_USER="root@pam"
+export PROXMOX_API_PASSWORD="..."
+```
+
+```yaml
+---
+kind: proxmox_kvm
+dry_run: false
+configs:
+
+  # Optional: Do not shutdown VMs having a lower uptime in minutes
+  min_uptime: 60
+
+  # Optional: Do not shutdown VMs in this name list
+  denylist:
+    - my-single-vm
+
+  # Optional: 60 seconds is the default
+  wait_before_restart: 60
 ```
 
 ## Run
