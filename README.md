@@ -18,13 +18,14 @@ Note: The config is re-read on every interval, no need to restart the service af
 
 Currently implemented Clouds:
 
-- cloudscale.ch
 - DigitalOcean
-- Hetzner Cloud
-- Hashicorp Nomad
 - Vultr
-- Exoscale
+- Hetzner Cloud
+- Proxmox KVM
 - CloudStack
+- Hashicorp Nomad
+- Exoscale
+- cloudscale.ch
 
 ## Install
 
