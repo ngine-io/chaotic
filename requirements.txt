@@ -7,3 +7,4 @@ python-digitalocean
 cs
 schedule
 proxmoxer
+python-json-logger
