@@ -15,7 +15,7 @@ class Nomad:
 
     def __init__(self, api_key: str, api_url: str = None, api_auth: str = None) -> None:
         self.api_key = api_key
-        self.api_url = api_url or "http://localhost:4646"
+        self.api_url = api_url or "http://127.0.0.1:4646"
         self.api_auth = tuple(api_auth.split(':')) if api_auth else None
 
     def query_api(self, method: str, path: str, params: dict = None, json: dict = None) -> requests.Response:
@@ -76,6 +76,10 @@ class NomadChaotic(Chaotic):
         if denied_ns is not None:
             namespaces = [ns for ns in namespaces if ns not in denied_ns]
 
+        if not namespaces:
+            log.info(f"No namespaces eligible")
+            return
+
         namespace = random.choice(namespaces)
 
         log.info(f"Selected namespace: {namespace}")
@@ -83,15 +87,16 @@ class NomadChaotic(Chaotic):
 
     def action(self) -> None:
         namespace = self._get_namespace()
-        allocs = self.nomad.list_allocs(namespace=namespace)
-        if allocs:
-            alloc = random.choice(allocs)
-            log.info(f"Selected alloc: {alloc['JobID']} (ID: {alloc['ID']}) on {alloc['NodeName']}")
-            signal = random.choice(self.configs['signals'])
-            log.info(f"Selected signal: {signal}")
-            if not self.dry_run:
-                self.nomad.signal_alloc(alloc_id=alloc['ID'], signal=signal)
-        else:
-            log.info("No allocs found")
+        if namespace:
+            allocs = self.nomad.list_allocs(namespace=namespace)
+            if allocs:
+                alloc = random.choice(allocs)
+                log.info(f"Selected alloc: {alloc['JobID']} (ID: {alloc['ID']}) on {alloc['NodeName']}")
+                signal = random.choice(self.configs['signals'])
+                log.info(f"Selected signal: {signal}")
+                if not self.dry_run:
+                    self.nomad.signal_alloc(alloc_id=alloc['ID'], signal=signal)
+            else:
+                log.info("No allocs found")
 
         log.info(f"done")
