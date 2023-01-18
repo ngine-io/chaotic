@@ -231,6 +231,13 @@ configs:
   # Optional: namespace denylist
   namespace_denylist:
     - default
+
+  # Optional: job type skip list
+  job_type_skiplist:
+    - system
+    - batch
+    - sysbatch
+
 ```
 
 ### Proxmox KVM
