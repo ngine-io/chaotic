@@ -40,6 +40,9 @@ class Nomad:
         }
         r = self.query_api('get', 'allocations', params=params)
         return r.json()
+        r = self.query_api("get", "allocations", params=params)
+        allocs = [alloc for alloc in r.json() if alloc["ClientStatus"] == "running" and alloc["JobType"] == "service"]
+        return allocs
 
     def signal_alloc(self, alloc_id: str, signal: str) -> None:
         json = {
