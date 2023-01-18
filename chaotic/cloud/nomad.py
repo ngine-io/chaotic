@@ -39,7 +39,7 @@ class Nomad:
             "namespace": namespace,
         }
         r = self.query_api("get", "allocations", params=params)
-        allocs = [alloc for alloc in r.json() if alloc["ClientStatus"] == "running" and alloc["JobType"] == "service"]
+        allocs = [alloc for alloc in r.json() if alloc["ClientStatus"] == "running"]
         return allocs
 
     def signal_alloc(self, alloc_id: str, signal: str) -> None:
@@ -89,6 +89,11 @@ class NomadChaotic(Chaotic):
         namespace = self._get_namespace()
         if namespace:
             allocs = self.nomad.list_allocs(namespace=namespace)
+
+            job_type_skiplist = self.configs.get("job_type_skiplist")
+            if job_type_skiplist:
+                allocs = [alloc for alloc in allocs if alloc["JobType"] not in job_type_skiplist]
+
             if allocs:
                 alloc = random.choice(allocs)
                 log.info(f"Selected alloc: {alloc['Name']} (ID: {alloc['ID']}) on {alloc['NodeName']}")

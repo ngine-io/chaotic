@@ -19,3 +19,7 @@ configs:
     - default
   signals:
     - SIGKILL
+  job_type_skiplist:
+    - system
+    - batch
+    - sysbatch
