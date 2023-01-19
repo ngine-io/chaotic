@@ -42,6 +42,10 @@ class Nomad:
         allocs = [alloc for alloc in r.json() if alloc["ClientStatus"] == "running"]
         return allocs
 
+    def read_alloc(self, alloc_id: str) -> dict:
+        r = self.query_api("get", f"allocation/{alloc_id}")
+        return r.json()
+
     def signal_alloc(self, alloc_id: str, signal: str) -> None:
         json = {
             "Signal": signal,
@@ -85,6 +89,16 @@ class NomadChaotic(Chaotic):
         log.info(f"Selected namespace: {namespace}")
         return namespace
 
+    def is_opt_out(self, alloc_id: str) -> bool:
+        opt_in_key = self.configs.get("job_meta_opt_key")
+        if opt_in_key:
+            alloc_details = self.nomad.read_alloc(alloc_id=alloc_id)
+            job_meta = alloc_details["Job"]["Meta"]
+            if job_meta:
+                opt_in = job_meta.get(opt_in_key)
+                return opt_in is not None and not opt_in
+        return False
+
     def action(self) -> None:
         namespace = self._get_namespace()
         if namespace:
@@ -101,10 +115,14 @@ class NomadChaotic(Chaotic):
             if allocs:
                 alloc = random.choice(allocs)
                 log.info(f"Selected alloc: {alloc['Name']} (ID: {alloc['ID']}) on {alloc['NodeName']}")
-                signal = random.choice(self.configs["signals"])
-                log.info(f"Selected signal: {signal}")
-                if not self.dry_run:
-                    self.nomad.signal_alloc(alloc_id=alloc["ID"], signal=signal)
+                if not self.is_opt_out(alloc_id=alloc["ID"]):
+                    signal = random.choice(self.configs["signals"])
+                    log.info(f"Selected signal: {signal}")
+                    if not self.dry_run:
+                        self.nomad.signal_alloc(alloc_id=alloc["ID"], signal=signal)
+                else:
+                    log.info("Job is opt-out configured, skipping")
+
             else:
                 log.info("No allocs found")
 

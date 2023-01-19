@@ -242,6 +242,8 @@ configs:
   job_skiplist:
     - my-job-name
 
+  # Optional: Add a meta tag in your nomad job "chaotic" = False to opt-out
+  job_meta_opt_key: chaotic
 ```
 
 ### Proxmox KVM
