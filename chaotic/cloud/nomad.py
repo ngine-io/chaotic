@@ -69,7 +69,7 @@ class NomadChaotic(Chaotic):
             api_auth=NOMAD_HTTP_AUTH,
         )
 
-    def _get_namespace(self) -> str:
+    def get_namespace(self) -> str:
         namespaces = [ns["Name"] for ns in self.nomad.list_namespaces()]
 
         allowed_ns = self.configs.get("namespace_allowlist")
@@ -100,7 +100,7 @@ class NomadChaotic(Chaotic):
         return False
 
     def action(self) -> None:
-        namespace = self._get_namespace()
+        namespace = self.get_namespace()
         if namespace:
             allocs = self.nomad.list_allocs(namespace=namespace)
 
