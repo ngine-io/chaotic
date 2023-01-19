@@ -94,6 +94,10 @@ class NomadChaotic(Chaotic):
             if job_type_skiplist:
                 allocs = [alloc for alloc in allocs if alloc["JobType"] not in job_type_skiplist]
 
+            job_skiplist = self.configs.get("job_skiplist")
+            if job_skiplist:
+                allocs = [alloc for alloc in allocs if alloc["JobID"] not in job_type_skiplist]
+
             if allocs:
                 alloc = random.choice(allocs)
                 log.info(f"Selected alloc: {alloc['Name']} (ID: {alloc['ID']}) on {alloc['NodeName']}")

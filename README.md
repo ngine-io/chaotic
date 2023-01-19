@@ -238,6 +238,10 @@ configs:
     - batch
     - sysbatch
 
+  # Optional: job name skip list
+  job_skiplist:
+    - my-job-name
+
 ```
 
 ### Proxmox KVM

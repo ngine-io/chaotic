@@ -23,3 +23,5 @@ configs:
     - system
     - batch
     - sysbatch
+  job_skiplist:
+    - prometheus
