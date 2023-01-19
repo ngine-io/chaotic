@@ -19,3 +19,11 @@ configs:
     - default
   signals:
     - SIGKILL
+  job_type_skiplist:
+    - system
+    - batch
+    - sysbatch
+  job_skiplist:
+    - prometheus
+  # Add a meta tag on in your nomad job "chaotic" = False to opt-out
+  job_meta_opt_key: chaotic

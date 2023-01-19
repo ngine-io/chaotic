@@ -231,6 +231,19 @@ configs:
   # Optional: namespace denylist
   namespace_denylist:
     - default
+
+  # Optional: job type skip list
+  job_type_skiplist:
+    - system
+    - batch
+    - sysbatch
+
+  # Optional: job name skip list
+  job_skiplist:
+    - my-job-name
+
+  # Optional: Add a meta tag in your nomad job "chaotic" = False to opt-out
+  job_meta_opt_key: chaotic
 ```
 
 ### Proxmox KVM
