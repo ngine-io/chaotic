@@ -246,6 +246,39 @@ configs:
   job_meta_opt_key: chaotic
 ```
 
+### Nomad Node
+
+Chaotic will drain a node and set it to be ineligible for some time.
+
+#### Config
+
+```
+export NOMAD_ADDR=http://nomad.example.com:4646
+```
+
+```yaml
+---
+kind: nomad_node
+dry_run: true
+configs:
+
+  # Optional: Node drain deadline in seconds, default 10
+  node_drain_deadline_seconds: 15
+
+  # Optional: Skip nodes in these classes
+  node_class_skiplist:
+    - storage
+
+  # Optional: Skip nodes with these names
+  node_skiplist:
+    - node1
+    - node5
+
+  # Optional: Wait for this amount of seconds before set node to be eligible again, default 60
+  wait_for: 100
+```
+
+
 ### Proxmox KVM
 
 Chaotic will stop a VM stop/start it with a delay of a configurable time (default 60s).

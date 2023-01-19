@@ -34,6 +34,29 @@ class Nomad:
         r.raise_for_status()
         return r
 
+    def list_nodes(self) -> List[dict]:
+        r = self.query_api("get", "nodes")
+        nodes = [node for node in r.json() if not node["Drain"] and node["SchedulingEligibility"] == "eligible"]
+        return nodes
+
+    def drain_node(self, node_id: str, deadline_seconds: int = 10) -> None:
+        json = {
+            "DrainSpec": {
+                "Deadline": deadline_seconds * 60 * 10**8,
+                "IgnoreSystemJobs": True,
+            },
+            "Meta": {
+                "message": "drained by chaotic",
+            },
+        }
+        self.query_api("post", f"node/{node_id}/drain", json=json)
+
+    def set_node_eligibility(self, node_id: str, eligible: bool = True) -> None:
+        json = {
+            "Eligibility": "eligible" if eligible else "ineligible",
+        }
+        self.query_api("post", f"node/{node_id}/eligibility", json=json)
+
     def list_allocs(self, namespace: Optional[str] = None) -> List[dict]:
         params = {
             "namespace": namespace,

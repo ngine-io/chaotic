@@ -1,0 +1,11 @@
+---
+kind: nomad_node
+dry_run: true
+configs:
+  node_drain_deadline_seconds: 15
+  node_class_skiplist:
+    - storage
+  node_skiplist:
+    - node1
+    - node5
+  wait_for: 100
