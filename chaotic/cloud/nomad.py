@@ -96,7 +96,7 @@ class NomadChaotic(Chaotic):
             job_meta = alloc_details["Job"]["Meta"]
             if job_meta:
                 opt_in = job_meta.get(opt_in_key)
-                return opt_in is not None and not opt_in
+                return opt_in is not None and (not opt_in or opt_in == "false")
         return False
 
     def action(self) -> None:
@@ -110,7 +110,7 @@ class NomadChaotic(Chaotic):
 
             job_skiplist = self.configs.get("job_skiplist")
             if job_skiplist:
-                allocs = [alloc for alloc in allocs if alloc["JobID"] not in job_type_skiplist]
+                allocs = [alloc for alloc in allocs if alloc["JobID"] not in job_skiplist]
 
             if allocs:
                 alloc = random.choice(allocs)
