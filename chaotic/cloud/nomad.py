@@ -1,5 +1,6 @@
 import os
 import random
+import time
 from typing import List, Optional
 
 import requests
@@ -33,6 +34,29 @@ class Nomad:
         )
         r.raise_for_status()
         return r
+
+    def list_nodes(self) -> List[dict]:
+        r = self.query_api("get", "nodes")
+        nodes = [node for node in r.json() if not node["Drain"] and node["SchedulingEligibility"] == "eligible"]
+        return nodes
+
+    def drain_node(self, node_id: str, deadline_seconds: int = 10, ignore_system_jobs: bool = True) -> None:
+        json = {
+            "DrainSpec": {
+                "Deadline": deadline_seconds * 60 * 10**8,
+                "IgnoreSystemJobs": ignore_system_jobs,
+            },
+            "Meta": {
+                "message": "drained by chaotic",
+            },
+        }
+        self.query_api("post", f"node/{node_id}/drain", json=json)
+
+    def set_node_eligibility(self, node_id: str, eligible: bool = True) -> None:
+        json = {
+            "Eligibility": "eligible" if eligible else "ineligible",
+        }
+        self.query_api("post", f"node/{node_id}/eligibility", json=json)
 
     def list_allocs(self, namespace: Optional[str] = None) -> List[dict]:
         params = {
@@ -100,6 +124,15 @@ class NomadChaotic(Chaotic):
         return False
 
     def action(self) -> None:
+        experiments = self.configs.get("experiments", ["job"])
+        exp = random.choice(experiments)
+        log.info(f"Running experiment {exp}")
+        method_name = f"action_{exp}"
+        func = getattr(self, method_name)
+        if func:
+            func()
+
+    def action_job(self) -> None:
         namespace = self.get_namespace()
         if namespace:
             allocs = self.nomad.list_allocs(namespace=namespace)
@@ -125,5 +158,56 @@ class NomadChaotic(Chaotic):
 
             else:
                 log.info("No allocs found")
+
+        log.info(f"done")
+
+    def action_node(self) -> None:
+        nodes = self.nomad.list_nodes()
+
+        node_skiplist = self.configs.get("node_skiplist")
+        if node_skiplist:
+            nodes = [node for node in nodes if node["Name"] not in node_skiplist]
+
+        node_class_skiplist = self.configs.get("node_class_skiplist")
+        if node_class_skiplist:
+            nodes = [node for node in nodes if node["NodeClass"] not in node_class_skiplist]
+
+        if nodes:
+            # How many nodes to drain in this run
+            node_drain_amount_in_percent = int(self.configs.get("node_drain_amount_in_percent", 0))
+            amount_of_nodes = 1
+            if node_drain_amount_in_percent and node_drain_amount_in_percent > 0:
+                amount_of_nodes = round(len(nodes) * node_drain_amount_in_percent / 100) or 1
+
+            nodes_drain = nodes.copy()
+            nodes_eligible = list()
+            for i in range(amount_of_nodes):
+                node = nodes_drain.pop(random.randrange(len(nodes_drain)))
+                nodes_eligible.append(node)
+
+                log.info(f"Drain node: {node['Name']}")
+
+                if not self.dry_run:
+                    deadline_seconds = int(self.configs.get("node_drain_deadline_seconds", 10))
+                    ignore_system_jobs = not bool(self.configs.get("node_drain_system_jobs", False))
+                    self.nomad.drain_node(
+                        node_id=node["ID"],
+                        deadline_seconds=deadline_seconds,
+                        ignore_system_jobs=ignore_system_jobs,
+                    )
+
+            node_wait_for = int(self.configs.get("node_wait_for", 60))
+            log.info(f"Sleeping for {node_wait_for} seconds")
+            if not self.dry_run:
+                time.sleep(node_wait_for)
+
+            for i in range(amount_of_nodes):
+                node = nodes_eligible.pop(random.randrange(len(nodes_eligible)))
+                log.info(f"Set node to be eligible: {node['Name']}")
+                if not self.dry_run:
+                    self.nomad.set_node_eligibility(
+                        node_id=node["ID"],
+                        eligible=True,
+                    )
 
         log.info(f"done")
