@@ -203,7 +203,7 @@ configs:
   wait_before_restart: 60
 ```
 
-### Nomad
+### Nomad Job
 
 Chaotic will send an allocation signal to an allocation in the available namespaces selected by an allow list.
 
@@ -218,6 +218,8 @@ export NOMAD_ADDR=http://nomad.example.com:4646
 kind: nomad
 dry_run: true
 configs:
+  experiments:
+    - job
 
   # Signals to choose from
   signals:
@@ -258,9 +260,11 @@ export NOMAD_ADDR=http://nomad.example.com:4646
 
 ```yaml
 ---
-kind: nomad_node
+kind: nomad
 dry_run: true
 configs:
+  experiments:
+    - node
 
   # Optional: Node drain deadline in seconds, default 10
   node_drain_deadline_seconds: 15
@@ -275,9 +279,8 @@ configs:
     - node5
 
   # Optional: Wait for this amount of seconds before set node to be eligible again, default 60
-  wait_for: 100
+  node_wait_for: 100
 ```
-
 
 ### Proxmox KVM
 

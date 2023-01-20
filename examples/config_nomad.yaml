@@ -15,6 +15,11 @@ excludes:
     - Aug01
     - Dec24
 configs:
+  experiments:
+    - job
+    - node
+
+  ## Job experiments configs
   namespace_denylist:
     - default
   signals:
@@ -27,3 +32,12 @@ configs:
     - prometheus
   # Add a meta tag on in your nomad job "chaotic" = False to opt-out
   job_meta_opt_key: chaotic
+
+  ## Node experiments configs
+  node_drain_deadline_seconds: 15
+  node_class_skiplist:
+    - storage
+  node_skiplist:
+    - node1
+    - node2
+  node_wait_for: 100

@@ -1,5 +1,6 @@
 import os
 import random
+import time
 from typing import List, Optional
 
 import requests
@@ -123,6 +124,15 @@ class NomadChaotic(Chaotic):
         return False
 
     def action(self) -> None:
+        experiments = self.configs.get("experiments", ["job"])
+        exp = random.choice(experiments)
+        log.info(f"Running experiment {exp}")
+        method_name = f"action_{exp}"
+        func = getattr(self, method_name)
+        if func:
+            func()
+
+    def action_job(self) -> None:
         namespace = self.get_namespace()
         if namespace:
             allocs = self.nomad.list_allocs(namespace=namespace)
@@ -148,5 +158,38 @@ class NomadChaotic(Chaotic):
 
             else:
                 log.info("No allocs found")
+
+        log.info(f"done")
+
+    def action_node(self) -> None:
+        nodes = self.nomad.list_nodes()
+
+        node_skiplist = self.configs.get("node_skiplist")
+        if node_skiplist:
+            nodes = [node for node in nodes if node["Name"] not in node_skiplist]
+
+        node_class_skiplist = self.configs.get("node_class_skiplist")
+        if node_class_skiplist:
+            nodes = [node for node in nodes if node["NodeClass"] not in node_class_skiplist]
+
+        if nodes:
+            node = random.choice(nodes)
+            log.info(f"Drain node: {node['Name']}")
+
+            if not self.dry_run:
+                deadline_seconds = int(self.configs.get("node_drain_deadline_seconds", 10))
+                self.nomad.drain_node(node_id=node["ID"], deadline_seconds=deadline_seconds)
+
+            node_wait_for = int(self.configs.get("node_wait_for", 60))
+            log.info(f"Sleeping for {node_wait_for} seconds")
+            if not self.dry_run:
+                time.sleep(node_wait_for)
+
+            log.info(f"Set node to be eligible: {node['Name']}")
+            if not self.dry_run:
+                self.nomad.set_node_eligibility(
+                    node_id=node["ID"],
+                    eligible=True,
+                )
 
         log.info(f"done")
