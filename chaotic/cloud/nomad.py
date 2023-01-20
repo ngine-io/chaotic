@@ -173,28 +173,41 @@ class NomadChaotic(Chaotic):
             nodes = [node for node in nodes if node["NodeClass"] not in node_class_skiplist]
 
         if nodes:
-            node = random.choice(nodes)
-            log.info(f"Drain node: {node['Name']}")
+            # How many nodes to drain in this run
+            node_drain_amount_in_percent = int(self.configs.get("node_drain_amount_in_percent", 0))
+            amount_of_nodes = 1
+            if node_drain_amount_in_percent and node_drain_amount_in_percent > 0:
+                amount_of_nodes = round(len(nodes) * node_drain_amount_in_percent / 100) or 1
 
-            if not self.dry_run:
-                deadline_seconds = int(self.configs.get("node_drain_deadline_seconds", 10))
-                ignore_system_jobs = not bool(self.configs.get("node_drain_system_jobs", False))
-                self.nomad.drain_node(
-                    node_id=node["ID"],
-                    deadline_seconds=deadline_seconds,
-                    ignore_system_jobs=ignore_system_jobs,
-                )
+            nodes_drain = nodes.copy()
+            nodes_eligible = list()
+            for i in range(amount_of_nodes):
+                node = nodes_drain.pop(random.randrange(len(nodes_drain)))
+                nodes_eligible.append(node)
+
+                log.info(f"Drain node: {node['Name']}")
+
+                if not self.dry_run:
+                    deadline_seconds = int(self.configs.get("node_drain_deadline_seconds", 10))
+                    ignore_system_jobs = not bool(self.configs.get("node_drain_system_jobs", False))
+                    self.nomad.drain_node(
+                        node_id=node["ID"],
+                        deadline_seconds=deadline_seconds,
+                        ignore_system_jobs=ignore_system_jobs,
+                    )
 
             node_wait_for = int(self.configs.get("node_wait_for", 60))
             log.info(f"Sleeping for {node_wait_for} seconds")
             if not self.dry_run:
                 time.sleep(node_wait_for)
 
-            log.info(f"Set node to be eligible: {node['Name']}")
-            if not self.dry_run:
-                self.nomad.set_node_eligibility(
-                    node_id=node["ID"],
-                    eligible=True,
-                )
+            for i in range(amount_of_nodes):
+                node = nodes_eligible.pop(random.randrange(len(nodes_eligible)))
+                log.info(f"Set node to be eligible: {node['Name']}")
+                if not self.dry_run:
+                    self.nomad.set_node_eligibility(
+                        node_id=node["ID"],
+                        eligible=True,
+                    )
 
         log.info(f"done")

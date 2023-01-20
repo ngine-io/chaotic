@@ -284,6 +284,9 @@ configs:
   # Optional: Also drain system jobs, default false
   node_drain_system_jobs: true
 
+  # Optional: Drain multiple nodes in one run in percent, fallback 1 node
+  node_drain_amount_in_percent: 30
+
 ```
 
 ### Proxmox KVM

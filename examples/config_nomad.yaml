@@ -42,3 +42,4 @@ configs:
     - node2
   node_wait_for: 100
   node_drain_system_jobs: true
+  node_drain_amount_in_percent: 66
