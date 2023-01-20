@@ -41,3 +41,4 @@ configs:
     - node1
     - node2
   node_wait_for: 100
+  node_drain_system_jobs: true

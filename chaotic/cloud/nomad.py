@@ -40,11 +40,11 @@ class Nomad:
         nodes = [node for node in r.json() if not node["Drain"] and node["SchedulingEligibility"] == "eligible"]
         return nodes
 
-    def drain_node(self, node_id: str, deadline_seconds: int = 10) -> None:
+    def drain_node(self, node_id: str, deadline_seconds: int = 10, ignore_system_jobs: bool = True) -> None:
         json = {
             "DrainSpec": {
                 "Deadline": deadline_seconds * 60 * 10**8,
-                "IgnoreSystemJobs": True,
+                "IgnoreSystemJobs": ignore_system_jobs,
             },
             "Meta": {
                 "message": "drained by chaotic",
@@ -178,7 +178,12 @@ class NomadChaotic(Chaotic):
 
             if not self.dry_run:
                 deadline_seconds = int(self.configs.get("node_drain_deadline_seconds", 10))
-                self.nomad.drain_node(node_id=node["ID"], deadline_seconds=deadline_seconds)
+                ignore_system_jobs = not bool(self.configs.get("node_drain_system_jobs", False))
+                self.nomad.drain_node(
+                    node_id=node["ID"],
+                    deadline_seconds=deadline_seconds,
+                    ignore_system_jobs=ignore_system_jobs,
+                )
 
             node_wait_for = int(self.configs.get("node_wait_for", 60))
             log.info(f"Sleeping for {node_wait_for} seconds")

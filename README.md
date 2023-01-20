@@ -280,6 +280,10 @@ configs:
 
   # Optional: Wait for this amount of seconds before set node to be eligible again, default 60
   node_wait_for: 100
+
+  # Optional: Also drain system jobs, default false
+  node_drain_system_jobs: true
+
 ```
 
 ### Proxmox KVM
