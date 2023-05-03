@@ -1,0 +1,10 @@
+cloudscale-sdk
+cs
+hcloud
+proxmoxer<2.0
+python-digitalocean
+python-dotenv
+python-json-logger
+pyyaml
+requests
+schedule
