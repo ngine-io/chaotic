@@ -318,11 +318,26 @@ configs:
 
 ## Run
 
+### CLI
 ```
 chaos-ngine
 ```
+### Docker 
 
-What you should see (cloudscale.ch):
+One shot:
+
+```
+docker run -ti --rm -v $PWD/examples/config_nomad.yaml:/app/config.yaml -e TZ=Europe/Zurich -e NOMAD_ADDR=$NOMAD_ADDR --name chaotic ghcr.io/ngine-io/chaotic:latest
+```
+
+As service:
+
+```
+docker run -ti --rm -v $PWD/examples/config_nomad.yaml:/app/config.yaml -e TZ=Europe/Zurich -e NOMAD_ADDR=$NOMAD_ADDR --name chaotic ghcr.io/ngine-io/chaotic:latest --periodic
+```
+
+## Logs
+What you should see (e.g. for kind cloudscale.ch):
 ```
 2021-06-09 09:01:25,433 - cloudscale.log:INFO:Started, version: 0.6.2
 2021-06-09 09:01:25,433 - cloudscale.log:INFO:Using profile default
@@ -339,7 +354,3 @@ What you should see (cloudscale.ch):
 2021-06-09 09:02:26,955 - cloudscale.log:INFO:HTTP status code 204
 2021-06-09 09:02:26,956 - chatic:INFO:done
 ```
-
-## Docker / Nomad run
-
-See https://gitlab.com/ngine/docker-images/chaotic
