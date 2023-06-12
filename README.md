@@ -10,9 +10,8 @@ Chaotic evaluates a plan, how it will bring chaos in your Cloud environment.
 
 Depending on the Cloud API used, it may kill allocations (Hashicorp Nomad), reboot or stop/start virtual machines in your Cloud environment.
 
-With no arguments given, Chaotic runs as a "one shot" meant to be executed as cron job. Passing `--periodic` runs it as daemon with configurable mintute intervals `--interval 5` (1 is the default).
-
-Note: The config is re-read on every interval, no need to restart the service after a config change.
+With no arguments given, Chaotic runs as a "one shot" meant to be executed as cron job. Passing `--periodic` runs it as daemon with configurable interval `--interval 5` in minutes (1 is the default).
+NOTE: The config is re-read on every interval, no need to restart the service after changing the config.
 
 ## Clouds
 
