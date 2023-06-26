@@ -63,8 +63,7 @@ class Nomad:
             "namespace": namespace,
         }
         r = self.query_api("get", "allocations", params=params)
-        allocs = [alloc for alloc in r.json() if alloc["ClientStatus"] == "running"]
-        return allocs
+        return r.json()
 
     def read_alloc(self, alloc_id: str) -> dict:
         r = self.query_api("get", f"allocation/{alloc_id}")
@@ -135,7 +134,7 @@ class NomadChaotic(Chaotic):
     def action_job(self) -> None:
         namespace = self.get_namespace()
         if namespace:
-            allocs = self.nomad.list_allocs(namespace=namespace)
+            allocs = [alloc for alloc in self.nomad.list_allocs(namespace=namespace) if alloc["ClientStatus"] == "running"]
 
             job_type_skiplist = self.configs.get("job_type_skiplist")
             if job_type_skiplist:
