@@ -1,14 +1,15 @@
 import os
 import random
 import time
+
 from cs import CloudStack
 
 from chaotic.cloud import Chaotic
 from chaotic.log import log
 
-CLOUDSTACK_API_ENDPOINT: str = os.getenv('CLOUDSTACK_API_ENDPOINT')
-CLOUDSTACK_API_KEY: str = os.getenv('CLOUDSTACK_API_KEY')
-CLOUDSTACK_API_SECRET: str = os.getenv('CLOUDSTACK_API_SECRET')
+CLOUDSTACK_API_ENDPOINT: str = os.getenv('CLOUDSTACK_API_ENDPOINT', "")
+CLOUDSTACK_API_KEY: str = os.getenv('CLOUDSTACK_API_KEY', "")
+CLOUDSTACK_API_SECRET: str = os.getenv('CLOUDSTACK_API_SECRET', "")
 
 
 class CloudStackChaotic(Chaotic):
@@ -21,7 +22,10 @@ class CloudStackChaotic(Chaotic):
         )
 
     def action(self) -> None:
-        tag = self.configs.get('tag')
+        tag = self.configs.get("tag")
+        if not tag:
+            return
+
         log.info(f"Querying with tag: {tag['key']}={tag['value']}")
 
         instances = self.cs.listVirtualMachines(

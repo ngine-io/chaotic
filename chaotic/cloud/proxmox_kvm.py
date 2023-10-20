@@ -1,15 +1,16 @@
 import os
 import random
 import time
+
 from proxmoxer import ProxmoxAPI
 
 from chaotic.cloud import Chaotic
 from chaotic.log import log
 
-PROXMOX_API_HOST = os.getenv('PROXMOX_API_HOST')
-PROXMOX_API_USER = os.getenv('PROXMOX_API_USER', 'root@pam')
-PROXMOX_API_PASSWORD = os.getenv('PROXMOX_API_PASSWORD')
-PROXMOX_API_VERIFY_SSL = bool(os.getenv('PROXMOX_API_VERIFY_SSL', False))
+PROXMOX_API_HOST: str = os.getenv("PROXMOX_API_HOST", "")
+PROXMOX_API_USER: str = os.getenv("PROXMOX_API_USER", 'root@pam')
+PROXMOX_API_PASSWORD: str = os.getenv("ROXMOX_API_PASSWORD", "")
+PROXMOX_API_VERIFY_SSL: bool = bool(os.getenv('PROXMOX_API_VERIFY_SSL', False))
 
 
 class ProxmoxKvmChaotic(Chaotic):

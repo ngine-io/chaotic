@@ -1,6 +1,6 @@
-import os
 import random
 import time
+
 import digitalocean
 
 from chaotic.cloud import Chaotic

@@ -1,12 +1,13 @@
 import os
 import random
 import time
+
 from cloudscale import Cloudscale, CloudscaleApiException
 
 from chaotic.cloud import Chaotic
 from chaotic.log import log
 
-CLOUDSCALE_API_TOKEN: str = os.getenv('CLOUDSCALE_API_TOKEN')
+CLOUDSCALE_API_TOKEN: str = os.getenv('CLOUDSCALE_API_TOKEN', "")
 
 class CloudscaleChChaotic(Chaotic):
 

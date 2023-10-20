@@ -1,13 +1,14 @@
 import os
 import random
 import time
+from typing import List, Optional
+
 import requests
-from typing import List
 
 from chaotic.cloud import Chaotic
 from chaotic.log import log
 
-VULTR_API_KEY: str = os.getenv('VULTR_API_KEY')
+VULTR_API_KEY: str = os.getenv('VULTR_API_KEY', "")
 
 
 class Vultr:
@@ -17,7 +18,7 @@ class Vultr:
     def __init__(self, api_key: str) -> None:
         self.api_key = api_key
 
-    def query_api(self, method: str, path: str, params: dict = None, json: dict = None) -> requests.Response:
+    def query_api(self, method: str, path: str, params: Optional[dict] = None, json: Optional[dict] = None) -> requests.Response:
         r = requests.request(
             method=method,
             url=f"{self.VULTR_API_URL}/{path}",

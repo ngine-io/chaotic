@@ -1,12 +1,13 @@
 import os
 import random
 import time
-from hcloud import Client, APIException
+
+from hcloud import Client
 
 from chaotic.cloud import Chaotic
 from chaotic.log import log
 
-HCLOUD_API_TOKEN: str = os.getenv('HCLOUD_API_TOKEN')
+HCLOUD_API_TOKEN: str = os.getenv("HCLOUD_API_TOKEN", "")
 
 class HcloudChaotic(Chaotic):
 

@@ -1,3 +1,4 @@
+from chaotic.cloud import Chaotic
 from chaotic.cloud.cloudscale_ch import CloudscaleChChaotic
 from chaotic.cloud.cloudstack import CloudStackChaotic
 from chaotic.cloud.digitalocean import DigitaloceanChaotic
@@ -22,7 +23,7 @@ class ChaoticFactory:
         "vultr": VultrChaotic,
     }
 
-    def get_instance(self, name: str) -> object:
+    def get_instance(self, name: str) -> Chaotic:
         log.info(f"Instantiate {name}")
         try:
             return self.CLOUD_CLASSES[name]()

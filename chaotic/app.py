@@ -1,17 +1,19 @@
+import json
 import os
 import sys
-from requests.models import Response
-import yaml
-import json
 import time
-import schedule
 from argparse import ArgumentParser
-import requests
 
+import requests
+import schedule
+import yaml
+from requests.models import Response
+
+from chaotic import ChaoticFactory
+from chaotic.cloud import Chaotic
 from chaotic.log import log
 from chaotic.version import __version__
 
-from chaotic import ChaoticFactory
 
 def app() -> None:
     print("")
