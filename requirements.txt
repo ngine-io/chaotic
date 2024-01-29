@@ -8,7 +8,7 @@ jsonpickle==3.0.2
 proxmoxer==1.3.1
 python-dateutil==2.8.2
 python-digitalocean==1.17.0
-python-dotenv==1.0.0
+python-dotenv==1.0.1
 python-json-logger==2.0.7
 pytz==2023.3.post1
 pyyaml==6.0.1
