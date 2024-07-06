@@ -1,4 +1,4 @@
-certifi==2024.2.2
+certifi==2024.7.4
 charset-normalizer==3.3.2
 cloudscale-sdk==0.7.0
 cs==3.2.0
