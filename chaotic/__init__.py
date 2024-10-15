@@ -2,7 +2,6 @@ from chaotic.cloud import Chaotic
 from chaotic.cloud.cloudscale_ch import CloudscaleChChaotic
 from chaotic.cloud.cloudstack import CloudStackChaotic
 from chaotic.cloud.digitalocean import DigitaloceanChaotic
-from chaotic.cloud.exoscale import ExoscaleChaotic
 from chaotic.cloud.hcloud import HcloudChaotic
 from chaotic.cloud.nomad import NomadChaotic
 from chaotic.cloud.proxmox_kvm import ProxmoxKvmChaotic
@@ -16,7 +15,6 @@ class ChaoticFactory:
         "cloudscale_ch": CloudscaleChChaotic,
         "cloudstack": CloudStackChaotic,
         "digitalocean": DigitaloceanChaotic,
-        "exoscale": ExoscaleChaotic,
         "hcloud": HcloudChaotic,
         "nomad": NomadChaotic,
         "proxmox_kvm": ProxmoxKvmChaotic,
