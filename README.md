@@ -23,7 +23,6 @@ Currently implemented Clouds:
 - Proxmox KVM
 - CloudStack
 - Hashicorp Nomad
-- Exoscale
 - cloudscale.ch
 
 ## Install
@@ -61,30 +60,6 @@ excludes:
     - Aug01
     - Dec24
   ```
-
-### Exoscale
-
-Chaotic will stop a server selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).
-
-```
-export EXOSCALE_API_KEY="..."
-export EXOSCALE_API_SECRET="..."
-```
-
-```yaml
----
-kind: exoscale
-dry_run: false
-configs:
-
-  # Optional, filter tag
-  tag:
-    key: chaos
-    value: enabled
-
-  # Optional, 60 seconds is the default
-  wait_before_restart: 60
-```
 
 ### CloudStack
 
@@ -321,7 +296,7 @@ configs:
 ```
 chaos-ngine
 ```
-### Docker 
+### Docker
 
 One shot:
 
