@@ -5,7 +5,7 @@ cs==3.3.0
 hcloud==2.3.0
 idna==3.10
 jsonpickle==3.3.0
-proxmoxer==2.1.0
+proxmoxer==2.2.0
 python-dateutil==2.9.0.post0
 python-digitalocean==1.17.0
 python-dotenv==1.0.1
