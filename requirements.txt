@@ -2,7 +2,7 @@ certifi==2025.6.15
 charset-normalizer==3.4.2
 cloudscale-sdk==0.7.0
 cs==3.4.0
-hcloud==2.5.3
+hcloud==2.5.4
 idna==3.10
 jsonpickle==4.1.1
 proxmoxer==2.2.0
