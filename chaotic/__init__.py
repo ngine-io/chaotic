@@ -22,6 +22,9 @@ class ChaoticFactory:
     }
 
     def get_instance(self, name: str) -> Chaotic:
+        if name is None:
+            raise ValueError("Cloud name must be provided")
+
         log.info(f"Instantiate {name}")
         try:
             return self.CLOUD_CLASSES[name]()
