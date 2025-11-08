@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 
 import requests
 import schedule
+import truststore
 import yaml
 from requests.models import Response
 
@@ -14,6 +15,7 @@ from chaotic.cloud import Chaotic
 from chaotic.log import log
 from chaotic.version import __version__
 
+truststore.inject_into_ssl()
 
 def app() -> None:
     print("")
