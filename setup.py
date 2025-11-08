@@ -40,7 +40,7 @@ setup(
     ],
     install_requires=install_requires,
     tests_require=tests_require,
-    python_requires='>=3.6',
+    python_requires='>=3.10',
     entry_points={
         'console_scripts': [
             'chaotic-ngine = chaotic.app:main',
