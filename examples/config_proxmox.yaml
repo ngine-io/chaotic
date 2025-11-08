@@ -1,0 +1,17 @@
+---
+kind: proxmox
+dry_run: true
+configs:
+  # Optional: Do not shutdown VMs having a lower uptime in minutes
+  min_uptime: 60
+
+  # Optional: Tag to select VMs for chaos actions, only VMs with this tag will be considered
+  #filter_tag: chaos-target
+
+  # Optional: Tag to skip VMs from chaos actions, even if they have the filter_tag
+  #skip_tag: chaos-skip
+
+  # Optional: List of VM names to skip from chaos actions, even if they have the filter_tag
+  denylist:
+    - example-vm1
+    - example-vm2
