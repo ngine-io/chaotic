@@ -17,11 +17,11 @@ from chaotic.version import __version__
 
 truststore.inject_into_ssl()
 
-def app() -> None:
+def app(config_source: str) -> None:
     print("")
     try:
         config: dict = dict()
-        config_source: str = os.getenv('CHAOTIC_CONFIG', 'config.yaml')
+        config_source: str = os.getenv('CHAOTIC_CONFIG', config_source)
 
         if config_source.startswith("http"):
             res: Response = requests.get(
@@ -58,9 +58,9 @@ def app() -> None:
         log.error(ex)
         sys.exit(1)
 
-def run_periodic(interval: int = 1) -> None:
+def run_periodic(interval: int = 1, config_source: str = "config.yaml") -> None:
     log.info(f"Running periodic in intervals of {interval} minute")
-    schedule.every(interval).minutes.do(app)
+    schedule.every(interval).minutes.do(app, config_source=config_source)
     time.sleep(1)
     schedule.run_all()
     while True:
@@ -73,18 +73,15 @@ def main() -> None:
     parser: ArgumentParser = ArgumentParser()
     parser.add_argument("--periodic", help="run periodic", action="store_true")
     parser.add_argument("--interval", help="set interval in minutes", type=int, default=1)
-    parser.add_argument("--version", help="show version", action="store_true")
+    parser.add_argument("--version", help="show version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument("--config", help="use config file", type=str, default="config.yaml")
     args = parser.parse_args()
-
-    if args.version:
-        print(f"version {__version__}")
-        sys.exit(0)
 
     log.info(f"Starting version {__version__}")
 
     if args.periodic:
         try:
-            run_periodic(args.interval)
+            run_periodic(interval=args.interval, config_source=args.config)
         except KeyboardInterrupt:
             print("")
             log.info(f"Stopping...")
@@ -92,7 +89,7 @@ def main() -> None:
             log.info(f"done")
             pass
     else:
-        app()
+        app(config_source=args.config)
 
 if __name__ == "__main__":
     main()
