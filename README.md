@@ -263,9 +263,11 @@ configs:
 
 ```
 
-### Proxmox KVM
+### Proxmox
 
-Chaotic will stop a VM stop/start it with a delay of a configurable time (default 60s).
+Chaotic will stop a VM (qemu and lxc) stop/start it with a delay of a configurable time (default 60s).
+
+Using user and password:
 
 ```
 export PROXMOX_API_HOST="pve1.example.com"
@@ -273,22 +275,39 @@ export PROXMOX_API_USER="root@pam"
 export PROXMOX_API_PASSWORD="..."
 ```
 
+Or token:
+```
+export PROXMOX_API_HOST="pve1.example.com"
+export PROXMOX_API_USER="api@pam!myTokenName"
+export PROXMOX_API_TOKEN="..."
+```
+
 ```yaml
 ---
-kind: proxmox_kvm
+kind: proxmox
 dry_run: false
 configs:
 
   # Optional: Do not shutdown VMs having a lower uptime in minutes
   min_uptime: 60
 
+  # Optional: Tag to select VMs for chaos actions
+  filter_tag: chaos-target
+
+  # Optional: Tag to skip VMs from chaos actions, even if they have the filter_tag
+  skip_tag: chaos-skip
+
   # Optional: Do not shutdown VMs in this name list
   denylist:
     - my-single-vm
 
+  tag_skip: chaos-skip
+
   # Optional: 60 seconds is the default
   wait_before_restart: 60
 ```
+
+Another way to skip a VM is to add a tag `choatic-ngine-skip`
 
 ## Run
 

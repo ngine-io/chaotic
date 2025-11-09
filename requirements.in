@@ -1,6 +1,6 @@
 cloudscale-sdk
 hcloud
-proxmoxer<3.0
+proxmoxer
 python-digitalocean
 python-dotenv
 python-json-logger
