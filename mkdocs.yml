@@ -1,0 +1,46 @@
+site_name: Chaotic - Chaos for Clouds
+repo_url: https://github.com/ngine-io/chaotic
+edit_uri: edit/main/docs/
+nav:
+  - Home: index.md
+  - Install: install.md
+  - Settings: settings.md
+  - Configs:
+    - Apache CloudStack: configs/cloudstack.md
+    - DigitalOcean: configs/digitalocean.md
+    - Vultr: configs/vultr.md
+    - cloudscale.ch: configs/cloudscale_ch.md
+    - Hetzner Cloud: configs/hetzner.md
+    - Proxmox: configs/proxmox.md
+    - Hashicorp Nomad: configs/nomad.md
+  - Run: running.md
+
+theme:
+  name: material
+  palette:
+  - scheme: default
+    primary: cyan
+    toggle:
+      icon: material/brightness-7
+
+  - scheme: slate
+    primary: cyan
+    toggle:
+      icon: material/brightness-4
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+
+plugins:
+  - search
+
+features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - content.action.edit
+    - navigation.indexes
