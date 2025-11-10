@@ -670,15 +670,15 @@
 <p>Chaotic will stop a VM (qemu and lxc) stop/start it with a delay of a configurable time (default 60s).</p>
 <h2 id="env-variables">ENV Variables</h2>
 <p>Auth using user and password:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>PROXMOX_API_HOST=&quot;pve1.example.com&quot;
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>PROXMOX_API_USER=&quot;root@pam&quot;
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>PROXMOX_API_PASSWORD=&quot;...&quot;
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="na">PROXMOX_API_HOST</span><span class="o">=</span><span class="s">pve1.example.com</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="na">PROXMOX_API_USER</span><span class="o">=</span><span class="s">root@pam</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="na">PROXMOX_API_PASSWORD</span><span class="o">=</span><span class="s">...</span>
 </code></pre></div>
-<p>Auth using API token (note the <em>!myTokenName</em> in <code>PROXMOX_API_USER</code>):
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>PROXMOX_API_HOST=&quot;pve1.example.com&quot;
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>PROXMOX_API_USER=&quot;api@pam!myTokenName&quot;
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>PROXMOX_API_TOKEN=&quot;...&quot;
-</code></pre></div></p>
+<p>Auth using API token (note the <em>!myTokenName</em> in <code>PROXMOX_API_USER</code>):</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="na">PROXMOX_API_HOST</span><span class="o">=</span><span class="s">pve1.example.com</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="na">PROXMOX_API_USER</span><span class="o">=</span><span class="s">api@pam!myTokenName</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">PROXMOX_API_TOKEN</span><span class="o">=</span><span class="s">...</span>
+</code></pre></div>
 <h2 id="configyml">Config.yml</h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nn">---</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proxmox</span>
