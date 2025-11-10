@@ -7,17 +7,18 @@ Chaotic will stop a VM (qemu and lxc) stop/start it with a delay of a configurab
 
 Auth using user and password:
 
-```
-PROXMOX_API_HOST="pve1.example.com"
-PROXMOX_API_USER="root@pam"
-PROXMOX_API_PASSWORD="..."
+```ini
+PROXMOX_API_HOST=pve1.example.com
+PROXMOX_API_USER=root@pam
+PROXMOX_API_PASSWORD=...
 ```
 
 Auth using API token (note the _!myTokenName_ in `PROXMOX_API_USER`):
-```
-PROXMOX_API_HOST="pve1.example.com"
-PROXMOX_API_USER="api@pam!myTokenName"
-PROXMOX_API_TOKEN="..."
+
+```ini
+PROXMOX_API_HOST=pve1.example.com
+PROXMOX_API_USER=api@pam!myTokenName
+PROXMOX_API_TOKEN=...
 ```
 
 ## Config.yml
