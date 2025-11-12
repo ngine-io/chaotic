@@ -72,9 +72,9 @@ def run_periodic(interval: int = 1, config_source: str = "config.yaml") -> None:
 def main() -> None:
     parser: ArgumentParser = ArgumentParser()
     parser.add_argument("--periodic", help="run periodic", action="store_true")
-    parser.add_argument("--interval", help="set interval in minutes", type=int, default=1)
+    parser.add_argument("--interval", help="set interval in minutes, default 1", type=int, default=1)
     parser.add_argument("--version", help="show version", action="version", version=f"%(prog)s {__version__}")
-    parser.add_argument("--config", help="use config file", type=str, default="config.yaml")
+    parser.add_argument("--config", help="use config file, default: config.yaml", type=str, default="config.yaml")
     args = parser.parse_args()
 
     log.info(f"Starting version {__version__}")
