@@ -42,8 +42,6 @@ configs:
   denylist:
     - my-single-vm
 
-  tag_skip: chaos-skip
-
   # Optional: 60 seconds is the default
   wait_before_restart: 60
 
