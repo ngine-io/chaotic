@@ -12,7 +12,7 @@ python-dotenv==1.2.2
 python-json-logger==4.0.0
 pytz==2025.2
 pyyaml==6.0.3
-requests==2.33.0
+requests==2.33.1
 schedule==1.2.2
 six==1.17.0
 truststore==0.10.4
