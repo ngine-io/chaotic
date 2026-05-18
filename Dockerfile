@@ -1,4 +1,4 @@
-FROM docker.io/python:3.14.3-slim
+FROM docker.io/python:3.14.5-slim
 
 WORKDIR /build
 COPY . .
