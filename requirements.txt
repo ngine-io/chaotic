@@ -1,5 +1,5 @@
 certifi==2026.6.17
-charset-normalizer==3.4.7
+charset-normalizer==3.4.9
 cloudscale-sdk==0.7.0
 cs==4.0.1
 hcloud==2.22.0
