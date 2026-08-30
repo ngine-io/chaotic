@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from chaotic.errors import ChaoticError, UnknownProviderError
+from chaotic.config import ChaosConfig, load_config
+from chaotic.errors import ChaoticError, ConfigError, UnknownProviderError
 from chaotic.factory import PROVIDERS, ChaoticFactory
 from chaotic.providers import (
     Chaotic,
@@ -18,11 +19,13 @@ from chaotic.version import __version__
 
 __all__ = [
     "PROVIDERS",
+    "ChaosConfig",
     "Chaotic",
     "ChaoticError",
     "ChaoticFactory",
     "CloudStackChaotic",
     "CloudscaleChChaotic",
+    "ConfigError",
     "DigitaloceanChaotic",
     "HcloudChaotic",
     "NomadChaotic",
@@ -30,4 +33,5 @@ __all__ = [
     "UnknownProviderError",
     "VultrChaotic",
     "__version__",
+    "load_config",
 ]
