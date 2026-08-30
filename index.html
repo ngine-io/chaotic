@@ -6,6 +6,8 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
+        <meta name="description" content="Chaos engineering for clouds, Proxmox and HashiCorp Nomad.">
+      
       
       
       
@@ -86,7 +88,7 @@
 
   
 
-<header class="md-header md-header--shadow" data-md-component="header">
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="." title="Chaotic - Chaos for Clouds" class="md-header__button md-logo" aria-label="Chaotic - Chaos for Clouds" data-md-component="logo">
       
@@ -121,9 +123,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="" for="__palette_1" hidden>
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
@@ -131,9 +133,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label=""  type="radio" name="__palette" id="__palette_1">
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="cyan" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="" for="__palette_0" hidden>
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
@@ -201,13 +203,141 @@
     
   </nav>
   
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="install/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Install
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="settings/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Settings
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="configs/cloudstack/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Configs
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="running/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Run
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="development/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Development
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
 </header>
     
     <div class="md-container" data-md-component="container">
       
       
-        
-          
         
       
       <main class="md-main" data-md-component="main">
@@ -221,8 +351,10 @@
                     
 
 
+  
 
-<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="." title="Chaotic - Chaos for Clouds" class="md-nav__button md-logo" aria-label="Chaotic - Chaos for Clouds" data-md-component="logo">
       
@@ -314,6 +446,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#clouds" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -394,7 +537,26 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
     
+    
+    
+      
+      
     
     
     <li class="md-nav__item md-nav__item--nested">
@@ -663,6 +825,33 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Development
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -688,6 +877,17 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#clouds" class="md-nav__link">
@@ -717,23 +917,94 @@
 
 
   
+    <a href="https://github.com/ngine-io/chaotic/edit/master/docs/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
   
 
 
-<h1 id="chaotic-ngine-chaos-for-clouds">Chaotic Ngine - Chaos for Clouds</h1>
-<p>Chaotic is a rather simple CLI tool that evaluates a plan, how it will bring chaos in your Cloud environment.</p>
-<p>Depending on the Cloud API used, it may kill allocations (Hashicorp Nomad), reboot or stop/start virtual machines in your Cloud environment or on premise Proxmox.</p>
-<h2 id="clouds">Clouds</h2>
-<p>Currently implemented Clouds APIs:</p>
-<ul>
-<li>DigitalOcean</li>
-<li>Vultr</li>
-<li>Hetzner Cloud</li>
-<li>Proxmox</li>
-<li>Apache CloudStack</li>
-<li>Hashicorp Nomad</li>
-<li>cloudscale.ch</li>
-</ul>
+<h1 id="chaotic-ngine-chaos-for-clouds">Chaotic Ngine - Chaos for Clouds<a class="headerlink" href="#chaotic-ngine-chaos-for-clouds" title="Permanent link">&para;</a></h1>
+<p>Chaotic is a small CLI tool that evaluates a plan describing how it should bring
+chaos to your Cloud environment.</p>
+<p>Depending on the API used, it may kill allocations (HashiCorp Nomad), or reboot
+and stop/start virtual machines in your Cloud environment or on premise Proxmox.</p>
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<ol>
+<li>A <strong>config</strong> (YAML or JSON, on disk or behind a URL) declares the <code>kind</code> of
+   chaos, whether it is a <code>dry_run</code>, provider specific <code>configs</code> and optional
+   <code>excludes</code>.</li>
+<li>Chaotic instantiates the matching provider and, unless an exclude window is
+   active, runs <strong>one</strong> experiment: it picks a single random target and acts on
+   it.</li>
+<li>It can do that once (a cron job) or on an interval (<code>--periodic</code>).</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nn">---</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">proxmox</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="nt">dry_run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nt">configs</span><span class="p">:</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">  </span><span class="nt">filter_tag</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">chaos-target</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">  </span><span class="nt">wait_before_restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">60</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nt">excludes</span><span class="p">:</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">  </span><span class="nt">weekdays</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">Sat</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">Sun</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Start with <code>dry_run: true</code></p>
+<p>A dry-run performs the whole selection and logs the target it <em>would</em> have
+hit, without calling any mutating API. It is the fastest way to check that
+your filters select what you expect.</p>
+</div>
+<h2 id="clouds">Clouds<a class="headerlink" href="#clouds" title="Permanent link">&para;</a></h2>
+<p>Currently implemented APIs:</p>
+<table>
+<thead>
+<tr>
+<th>Cloud</th>
+<th><code>kind</code></th>
+<th>Experiment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apache CloudStack</td>
+<td><code>cloudstack</code></td>
+<td>Stop and start an instance</td>
+</tr>
+<tr>
+<td>cloudscale.ch</td>
+<td><code>cloudscale_ch</code></td>
+<td>Stop and start a server</td>
+</tr>
+<tr>
+<td>DigitalOcean</td>
+<td><code>digitalocean</code></td>
+<td>Shut down and boot a droplet</td>
+</tr>
+<tr>
+<td>HashiCorp Nomad</td>
+<td><code>nomad</code></td>
+<td>Signal an alloc, or drain nodes</td>
+</tr>
+<tr>
+<td>Hetzner Cloud</td>
+<td><code>hcloud</code></td>
+<td>Power a server off and on</td>
+</tr>
+<tr>
+<td>Proxmox</td>
+<td><code>proxmox</code></td>
+<td>Shut down and start a VM or LXC</td>
+</tr>
+<tr>
+<td>Vultr</td>
+<td><code>vultr</code></td>
+<td>Halt and start an instance</td>
+</tr>
+</tbody>
+</table>
+<p>See <a href="settings/">Settings</a> for the options every provider shares, and the
+per-cloud pages for the rest.</p>
 
 
 
@@ -783,7 +1054,7 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": [], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.indexes", "content.action.edit", "content.code.copy"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
       <script src="assets/javascripts/bundle.d7400e89.min.js"></script>
