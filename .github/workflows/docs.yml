@@ -1,9 +1,17 @@
+---
 name: Publish Docs
 
 on:
   push:
-    branches:
-      - master
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
 
 jobs:
   deploy:
@@ -11,32 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Setup Python
-        uses: actions/setup-python@v7
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10
         with:
-          python-version: "3.x"
+          enable-cache: true
 
-      - name: Upgrade pip
-        run: |
-          # install pip=>20.1 to use "pip cache dir"
-          python3 -m pip install --upgrade pip
-
-      - name: Get pip cache dir
-        id: pip-cache
-        run: echo "::set-output name=dir::$(pip cache dir)"
-
-      - name: Cache dependencies
-        uses: actions/cache@v6
-        with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements-docs.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
-        run: python3 -m pip install -r ./requirements-docs.txt
-
-      - run: mkdocs build
+      - name: Build docs
+        run: uv run --group docs --frozen mkdocs build --strict
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
