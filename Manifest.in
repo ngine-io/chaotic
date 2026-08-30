@@ -1,5 +1,0 @@
-include *.txt
-include *.yml
-include tox.ini
-graft tests
-global-exclude *.py[cod]
