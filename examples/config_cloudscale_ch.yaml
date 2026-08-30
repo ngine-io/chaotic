@@ -1,5 +1,9 @@
 ---
 kind: cloudscale_ch
-dry_run: false
+dry_run: true
 configs:
+  # Optional: filter by tag
   filter_tag: "chaos=enabled"
+
+  # Optional: 60 seconds is the default
+  wait_before_restart: 60

@@ -1,5 +1,9 @@
 ---
 kind: hcloud
-dry_run: false
+dry_run: true
 configs:
+  # Optional: filter by label selector
   label: "chaos=enabled"
+
+  # Optional: 60 seconds is the default
+  wait_before_restart: 60
