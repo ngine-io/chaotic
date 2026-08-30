@@ -1,0 +1,134 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "chaotic-ngine"
+dynamic = ["version"]
+description = "Chaos for Clouds."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "René Moser", email = "mail@renemoser.net" }]
+keywords = ["chaos-engineering", "cloud", "nomad", "proxmox", "sre"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Systems Administration",
+    "Typing :: Typed",
+]
+dependencies = [
+    "cloudscale-sdk>=0.7",
+    "cs>=4.0",
+    "hcloud>=2.0",
+    "proxmoxer>=2.0",
+    "python-digitalocean>=1.17",
+    "python-dotenv>=1.0",
+    "python-json-logger>=3.1",
+    "pyyaml>=6.0",
+    "requests>=2.32",
+    "schedule>=1.2",
+    "truststore>=0.10",
+]
+
+[project.urls]
+Homepage = "https://github.com/ngine-io/chaotic"
+Documentation = "https://ngine-io.github.io/chaotic/"
+Source = "https://github.com/ngine-io/chaotic"
+Issues = "https://github.com/ngine-io/chaotic/issues"
+
+[project.scripts]
+chaotic-ngine = "chaotic.app:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.14",
+    "pytest>=8.3",
+    "pytest-cov>=6.0",
+    "responses>=0.25",
+    "ruff>=0.16",
+    "types-pyyaml>=6.0",
+    "types-requests>=2.32",
+]
+docs = ["mkdocs>=1.6", "mkdocs-material>=9.5"]
+
+[tool.hatch.version]
+path = "src/chaotic/version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chaotic"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src", "tests", "docs", "examples", "mkdocs.yml", "logging.ini", "README.md", "LICENSE"]
+
+# --------------------------------------------------------------------------- #
+# Linting / formatting
+# --------------------------------------------------------------------------- #
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+src = ["src"]
+
+[tool.ruff.lint]
+select = [
+    "ARG", # unused arguments
+    "B",   # bugbear
+    "C4",  # comprehensions
+    "DTZ", # naive datetimes
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "FA",  # future annotations
+    "G",   # logging format
+    "I",   # import sorting
+    "ISC", # implicit str concat
+    "LOG", # logging misuse
+    "PIE", # misc lints
+    "PTH", # pathlib
+    "RET", # return simplifications
+    "RUF", # ruff specific
+    "S",   # bandit
+    "SIM", # simplify
+    "T20", # no print()
+    "TID", # tidy imports
+    "UP",  # pyupgrade
+    "W",   # pycodestyle warnings
+]
+ignore = [
+    # Chaos targets are picked for fun, not for secrecy: `random` is the right tool.
+    "S311",
+    # Exclude windows are evaluated against the operator's local wall clock (TZ env var),
+    # so naive datetimes are intentional here.
+    "DTZ005",
+    "DTZ007",
+]
+
+[tool.ruff.lint.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.isort]
+known-first-party = ["chaotic"]
+
+# --------------------------------------------------------------------------- #
+# Type checking
+# --------------------------------------------------------------------------- #
+[tool.mypy]
+python_version = "3.10"
+files = ["src"]
+strict = true
+warn_unreachable = true
+pretty = true
+
+[[tool.mypy.overrides]]
+# None of the vendor SDKs ship type information.
+module = ["cloudscale.*", "cs.*", "digitalocean.*", "hcloud.*", "proxmoxer.*", "schedule.*", "truststore.*"]
+ignore_missing_imports = true
