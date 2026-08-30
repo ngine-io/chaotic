@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import requests
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 NOMAD_ADDR: str = os.getenv("NOMAD_ADDR", "")

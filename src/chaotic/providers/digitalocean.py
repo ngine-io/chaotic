@@ -3,7 +3,7 @@ import time
 
 import digitalocean
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 
