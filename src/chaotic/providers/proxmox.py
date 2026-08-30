@@ -59,7 +59,9 @@ class ProxmoxChaotic(RestartChaotic):
                 raise ConfigError("PROXMOX_API_PASSWORD must NOT be set when using token authentication")
             api_user, _, token_name = user.partition("!")
             if not token_name:
-                raise ConfigError("PROXMOX_API_USER must include a token name after '!' when using token authentication")
+                raise ConfigError(
+                    "PROXMOX_API_USER must include a token name after '!' when using token authentication"
+                )
         else:
             log.info("Using user/password authentication")
             if not password:
@@ -97,7 +99,11 @@ class ProxmoxChaotic(RestartChaotic):
             tags = _tags(vm)
 
             if filter_tag and filter_tag not in tags:
-                log.debug("VM %s does not have filter_tag '%s', skipping", vm["name"], filter_tag)
+                log.debug(
+                    "VM %s does not have filter_tag '%s', skipping",
+                    vm["name"],
+                    filter_tag,
+                )
                 continue
             if vm["status"] != RUNNING_STATUS:
                 log.debug("VM %s not running, skipping", vm["name"])
