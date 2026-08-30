@@ -1,6 +1,7 @@
 # Vultr Settings
 
-Chaotic will stop a server selected by an optional filter tag and stop/start it with a delay of a configurable time (default 60s).
+Chaotic will pick a random instance, optionally narrowed down by a tag, and halt
+and start it with a delay of a configurable time (default 60s).
 
 ## ENV Variables
 
@@ -15,6 +16,13 @@ VULTR_API_KEY="..."
 kind: vultr
 dry_run: true
 configs:
+
+  # Optional instance tag filter
   tag: "chaos=enabled"
 
+  # Optional, 60 seconds is the default
+  wait_before_restart: 60
 ```
+
+!!! warning "Without `tag`, every instance is a candidate"
+    Set a tag unless the whole account is meant to be chaos territory.
