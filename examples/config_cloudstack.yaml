@@ -2,8 +2,16 @@
 kind: cloudstack
 dry_run: true
 configs:
+  # Required: filter tag
   tag:
     key: chaos
     value: enabled
+
+  # Optional: filter by zone ID
   # zoneid: xyz
-  # projectid:
+
+  # Optional: use a project instead of the account
+  # projectid: xyz
+
+  # Optional: 60 seconds is the default
+  wait_before_restart: 60
