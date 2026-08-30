@@ -4,7 +4,7 @@ import time
 
 from cloudscale import Cloudscale, CloudscaleApiException
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 CLOUDSCALE_API_TOKEN: str = os.getenv('CLOUDSCALE_API_TOKEN', "")

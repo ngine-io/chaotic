@@ -4,7 +4,7 @@ import time
 
 from proxmoxer import ProxmoxAPI
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 PROXMOX_API_HOST: str = os.getenv("PROXMOX_API_HOST", "")

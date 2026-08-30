@@ -4,7 +4,7 @@ import time
 
 from hcloud import Client
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 HCLOUD_API_TOKEN: str = os.getenv("HCLOUD_API_TOKEN", "")

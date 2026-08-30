@@ -5,7 +5,7 @@ from typing import List, Optional
 
 import requests
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 VULTR_API_KEY: str = os.getenv('VULTR_API_KEY', "")

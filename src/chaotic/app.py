@@ -11,7 +11,7 @@ import yaml
 from requests.models import Response
 
 from chaotic import ChaoticFactory
-from chaotic.cloud import Chaotic
+from chaotic.providers import Chaotic
 from chaotic.log import log
 from chaotic.version import __version__
 

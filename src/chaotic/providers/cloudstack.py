@@ -4,7 +4,7 @@ import time
 
 from cs import CloudStack
 
-from chaotic.cloud import Chaotic
+from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
 CLOUDSTACK_API_ENDPOINT: str = os.getenv('CLOUDSTACK_API_ENDPOINT', "")

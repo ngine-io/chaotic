@@ -1,12 +1,14 @@
-from chaotic.cloud import Chaotic
-from chaotic.cloud.cloudscale_ch import CloudscaleChChaotic
-from chaotic.cloud.cloudstack import CloudStackChaotic
-from chaotic.cloud.digitalocean import DigitaloceanChaotic
-from chaotic.cloud.hcloud import HcloudChaotic
-from chaotic.cloud.nomad import NomadChaotic
-from chaotic.cloud.proxmox import ProxmoxChaotic
-from chaotic.cloud.vultr import VultrChaotic
 from chaotic.log import log
+from chaotic.providers import (
+    Chaotic,
+    CloudscaleChChaotic,
+    CloudStackChaotic,
+    DigitaloceanChaotic,
+    HcloudChaotic,
+    NomadChaotic,
+    ProxmoxChaotic,
+    VultrChaotic,
+)
 
 
 class ChaoticFactory:
