@@ -48,7 +48,7 @@ Source = "https://github.com/ngine-io/chaotic"
 Issues = "https://github.com/ngine-io/chaotic/issues"
 
 [project.scripts]
-chaotic-ngine = "chaotic.app:main"
+chaotic-ngine = "chaotic.cli:main"
 
 [dependency-groups]
 dev = [

@@ -11,5 +11,9 @@ class ChaoticError(Exception):
     """Base class for every error raised deliberately by chaotic."""
 
 
+class ConfigError(ChaoticError):
+    """The config source is missing, unreadable or semantically invalid."""
+
+
 class UnknownProviderError(ChaoticError):
     """The configured ``kind`` has no provider implementation."""
