@@ -1,4 +1,3 @@
-# Set update schedule for GitHub Actions
 ---
 version: 2
 updates:
@@ -6,11 +5,17 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      github-actions:
+        patterns: ["*"]
 
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/"
     schedule:
       interval: "weekly"
+    groups:
+      python-dependencies:
+        patterns: ["*"]
 
   - package-ecosystem: "docker"
     directory: "/"
