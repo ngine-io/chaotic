@@ -1,4 +1,5 @@
 import os
+from functools import cached_property
 import random
 import time
 from typing import List, Optional
@@ -7,11 +8,6 @@ import requests
 
 from chaotic.providers.base import Chaotic
 from chaotic.log import log
-
-NOMAD_ADDR: str = os.getenv("NOMAD_ADDR", "")
-NOMAD_TOKEN: str = os.getenv("NOMAD_TOKEN", "")
-NOMAD_HTTP_AUTH: str = os.getenv("NOMAD_HTTP_AUTH", "")
-
 
 class Nomad:
     def __init__(self, api_key: str, api_url: Optional[str] = None, api_auth: Optional[str] = None) -> None:
@@ -84,16 +80,17 @@ class Nomad:
 
 
 class NomadChaotic(Chaotic):
-    def __init__(self) -> None:
-        super().__init__()
-        self.nomad = Nomad(
-            api_key=NOMAD_TOKEN,
-            api_url=NOMAD_ADDR,
-            api_auth=NOMAD_HTTP_AUTH,
+    @cached_property
+    def client(self) -> Nomad:
+        """API client, created on first use so that importing stays side effect free."""
+        return Nomad(
+            api_key=os.getenv("NOMAD_TOKEN", ""),
+            api_url=os.getenv("NOMAD_ADDR", ""),
+            api_auth=os.getenv("NOMAD_HTTP_AUTH", ""),
         )
 
     def get_namespace(self) -> str:
-        namespaces = [ns["Name"] for ns in self.nomad.list_namespaces()]
+        namespaces = [ns["Name"] for ns in self.client.list_namespaces()]
 
         allowed_ns = self.configs.get("namespace_allowlist")
         if allowed_ns is not None:
@@ -115,7 +112,7 @@ class NomadChaotic(Chaotic):
     def is_opt_out(self, alloc_id: str) -> bool:
         opt_in_key = self.configs.get("job_meta_opt_key")
         if opt_in_key:
-            alloc_details = self.nomad.read_alloc(alloc_id=alloc_id)
+            alloc_details = self.client.read_alloc(alloc_id=alloc_id)
             job_meta = alloc_details["Job"]["Meta"]
             if job_meta:
                 opt_in = job_meta.get(opt_in_key)
@@ -134,7 +131,7 @@ class NomadChaotic(Chaotic):
     def action_job(self) -> None:
         namespace = self.get_namespace()
         if namespace:
-            allocs = [alloc for alloc in self.nomad.list_allocs(namespace=namespace) if alloc["ClientStatus"] == "running"]
+            allocs = [alloc for alloc in self.client.list_allocs(namespace=namespace) if alloc["ClientStatus"] == "running"]
 
             job_type_skiplist = self.configs.get("job_type_skiplist")
             if job_type_skiplist:
@@ -151,7 +148,7 @@ class NomadChaotic(Chaotic):
                     signal = random.choice(self.configs["signals"])
                     log.info(f"Selected signal: {signal}")
                     if not self.dry_run:
-                        self.nomad.signal_alloc(alloc_id=alloc["ID"], signal=signal)
+                        self.client.signal_alloc(alloc_id=alloc["ID"], signal=signal)
                 else:
                     log.info("Job is opt-out configured, skipping")
 
@@ -161,7 +158,7 @@ class NomadChaotic(Chaotic):
         log.info(f"done")
 
     def action_node(self) -> None:
-        nodes = self.nomad.list_nodes()
+        nodes = self.client.list_nodes()
 
         node_skiplist = self.configs.get("node_skiplist")
         if node_skiplist:
@@ -189,7 +186,7 @@ class NomadChaotic(Chaotic):
                 if not self.dry_run:
                     deadline_seconds = int(self.configs.get("node_drain_deadline_seconds", 10))
                     ignore_system_jobs = not bool(self.configs.get("node_drain_system_jobs", False))
-                    self.nomad.drain_node(
+                    self.client.drain_node(
                         node_id=node["ID"],
                         deadline_seconds=deadline_seconds,
                         ignore_system_jobs=ignore_system_jobs,
@@ -204,7 +201,7 @@ class NomadChaotic(Chaotic):
                 node = nodes_eligible.pop(random.randrange(len(nodes_eligible)))
                 log.info(f"Set node to be eligible: {node['Name']}")
                 if not self.dry_run:
-                    self.nomad.set_node_eligibility(
+                    self.client.set_node_eligibility(
                         node_id=node["ID"],
                         eligible=True,
                     )

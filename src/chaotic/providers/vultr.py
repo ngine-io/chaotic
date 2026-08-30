@@ -1,4 +1,5 @@
 import os
+from functools import cached_property
 import random
 import time
 from typing import List, Optional
@@ -7,9 +8,6 @@ import requests
 
 from chaotic.providers.base import Chaotic
 from chaotic.log import log
-
-VULTR_API_KEY: str = os.getenv('VULTR_API_KEY', "")
-
 
 class Vultr:
 
@@ -56,28 +54,29 @@ class Vultr:
 
 class VultrChaotic(Chaotic):
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.vultr = Vultr(api_key=VULTR_API_KEY)
+    @cached_property
+    def client(self) -> Vultr:
+        """API client, created on first use so that importing stays side effect free."""
+        return Vultr(api_key=os.getenv("VULTR_API_KEY", ""))
 
     def action(self) -> None:
         tag = self.configs.get('tag')
         log.info(f"Querying with tag: {tag}")
-        instances = self.vultr.list_instances(tag=tag)
+        instances = self.client.list_instances(tag=tag)
 
         if instances:
             instance = random.choice(instances)
             log.info(f"Choose server {instance['label']}")
             if not self.dry_run:
                 log.info(f"Stopping server {instance['label']}")
-                self.vultr.halt_instance(instance['id'])
+                self.client.halt_instance(instance['id'])
 
                 wait_before_restart = int(self.configs.get('wait_before_restart', 60))
                 log.info(f"Sleeping for {wait_before_restart} seconds")
                 time.sleep(wait_before_restart)
 
                 log.info(f"Starting server {instance['label']}")
-                self.vultr.start_instance(instance['id'])
+                self.client.start_instance(instance['id'])
         else:
             log.info("No servers found")
 
