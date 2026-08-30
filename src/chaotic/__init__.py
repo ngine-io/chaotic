@@ -1,4 +1,14 @@
-"""Chaotic - Chaos for Clouds."""
+"""Chaotic - Chaos for Clouds.
+
+Public API::
+
+    from chaotic import ChaoticFactory, load_config
+
+    config = load_config("config.yaml")
+    chaos = ChaoticFactory().get_instance(config.kind)
+    chaos.configure(configs=config.configs, dry_run=config.dry_run, excludes=config.excludes)
+    chaos.action()
+"""
 
 from __future__ import annotations
 
