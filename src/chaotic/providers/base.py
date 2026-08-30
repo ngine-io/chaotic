@@ -1,54 +1,46 @@
+"""Provider base classes."""
+
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-from datetime import datetime
+from typing import Any, Mapping
+
+from chaotic.excludes import excluded_reason
 from chaotic.log import log
 
+
 class Chaotic(ABC):
+    """Base class for all chaos providers."""
 
-    def configure(self, configs: dict, dry_run: bool, excludes: dict) -> None:
-        self.configs = configs
+    def __init__(self) -> None:
+        self.configs: Mapping[str, Any] = {}
+        self.dry_run: bool = False
+        self.excludes: Mapping[str, Any] = {}
+
+    def configure(
+        self,
+        configs: Mapping[str, Any] | None = None,
+        dry_run: bool = False,
+        excludes: Mapping[str, Any] | None = None,
+    ) -> None:
+        """Apply a chaos plan to this provider.
+
+        Must be called before :meth:`action`. An active exclude window forces
+        ``dry_run`` on, it never cancels the run outright — that way the logs
+        still show which target *would* have been hit.
+        """
+        self.configs = configs or {}
         self.dry_run = dry_run
-        self.excludes = excludes
+        self.excludes = excludes or {}
+
+        reason = excluded_reason(self.excludes)
+        if reason:
+            log.info("%s, forcing dry-run", reason)
+            self.dry_run = True
+
         if self.dry_run:
-            log.info(f"Running in dry-run")
-        self._handle_excludes()
-
-    def _handle_excludes(self) -> None:
-        if 'days_of_year' in self.excludes:
-            today = datetime.today().strftime('%b%d')
-            if today in self.excludes['days_of_year']:
-                log.info(f"Today '{today}' in days_of_year excludes, running dry-run")
-                self.dry_run = True
-
-        if 'weekdays' in self.excludes:
-            today = datetime.today().strftime('%a')
-            if today in self.excludes['weekdays']:
-                log.info(f"Today '{today}' in weekday excludes, running dry-run")
-                self.dry_run = True
-
-        if 'times_of_day' in self.excludes:
-            now = datetime.now().time()
-            for time_range in self.excludes['times_of_day']:
-                start, end = time_range.split('-')
-                start_time = datetime.strptime(start, "%H:%M").time()
-                end_time = datetime.strptime(end, "%H:%M").time()
-                if start_time > end_time:
-                    end_of_day = datetime.strptime("23:59", "%H:%M").time()
-                    if start_time <= now <= end_of_day:
-                        log.info(f"Exclude {start_time}-{end_time}")
-                        log.info(f"{now} in time of day excludes, running dry-run")
-                        self.dry_run = True
-
-                    start_of_day = datetime.strptime("00:01", "%H:%M").time()
-                    if start_of_day <= now <= end_time:
-                        log.info(f"Exclude {start_time}-{end_time}")
-                        log.info(f"{now} in time of day excludes, running dry-run")
-                        self.dry_run = True
-                else:
-                    if start_time <= now <= end_time:
-                        log.info(f"Exclude {start_time}-{end_time}")
-                        log.info(f"{now} in time of day excludes, running dry-run")
-                        self.dry_run = True
+            log.info("Running in dry-run")
 
     @abstractmethod
     def action(self) -> None:
-        pass
+        """Run the chaos experiment once."""
