@@ -13,6 +13,8 @@ from chaotic.providers import (
     HcloudChaotic,
     NomadChaotic,
     ProxmoxChaotic,
+    RestartChaotic,
+    Target,
     VultrChaotic,
 )
 from chaotic.version import __version__
@@ -30,6 +32,8 @@ __all__ = [
     "HcloudChaotic",
     "NomadChaotic",
     "ProxmoxChaotic",
+    "RestartChaotic",
+    "Target",
     "UnknownProviderError",
     "VultrChaotic",
     "__version__",

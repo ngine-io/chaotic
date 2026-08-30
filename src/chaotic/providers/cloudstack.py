@@ -1,14 +1,23 @@
+"""Apache CloudStack provider.
+
+Requires ``CLOUDSTACK_API_ENDPOINT``, ``CLOUDSTACK_API_KEY`` and
+``CLOUDSTACK_API_SECRET``.
+"""
+
+from __future__ import annotations
+
 import os
+from collections.abc import Sequence
 from functools import cached_property
-import random
-import time
 
 from cs import CloudStack
 
-from chaotic.providers.base import Chaotic
 from chaotic.log import log
+from chaotic.providers.base import RestartChaotic, Target
 
-class CloudStackChaotic(Chaotic):
+
+class CloudStackChaotic(RestartChaotic):
+    """Stop and start a random CloudStack instance."""
 
     @cached_property
     def client(self) -> CloudStack:
@@ -19,32 +28,28 @@ class CloudStackChaotic(Chaotic):
             secret=os.getenv("CLOUDSTACK_API_SECRET", ""),
         )
 
-    def action(self) -> None:
+    def list_targets(self) -> Sequence[Target]:
+        # A tag is mandatory here on purpose: without one, every instance in the
+        # account would become a chaos candidate.
         tag = self.configs.get("tag")
         if not tag:
-            return
+            log.warning("No 'tag' configured, refusing to consider all instances")
+            return []
 
-        log.info(f"Querying with tag: {tag['key']}={tag['value']}")
-
-        instances = self.client.listVirtualMachines(
-            tags=[tag],
-            projectid=self.configs.get('projectid'),
-            zoneid=self.configs.get('zoneid'),
-            fetch_list=True,
+        log.info("Querying with tag: %s=%s", tag.get("key"), tag.get("value"))
+        instances = (
+            self.client.listVirtualMachines(
+                tags=[tag],
+                projectid=self.configs.get("projectid"),
+                zoneid=self.configs.get("zoneid"),
+                fetch_list=True,
+            )
+            or []
         )
-        if instances:
-            instance = random.choice(instances)
-            log.info(f"Choose server {instance['name']}")
-            if not self.dry_run:
-                log.info(f"Stopping server {instance['name']}")
-                self.client.stopVirtualMachine(id=instance['id'])
-                wait_before_restart = int(self.configs.get('wait_before_restart', 60))
-                log.info(f"Sleeping for {wait_before_restart} seconds")
-                time.sleep(wait_before_restart)
+        return [Target(id=instance["id"], name=instance["name"], raw=instance) for instance in instances]
 
-                log.info(f"Starting server {instance['name']}")
-                self.client.startVirtualMachine(id=instance['id'])
-        else:
-            log.info("No servers found")
+    def stop(self, target: Target) -> None:
+        self.client.stopVirtualMachine(id=target.id)
 
-        log.info(f"done")
+    def start(self, target: Target) -> None:
+        self.client.startVirtualMachine(id=target.id)

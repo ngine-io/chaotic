@@ -1,6 +1,8 @@
 """Chaos providers, one module per API."""
 
-from chaotic.providers.base import Chaotic
+from __future__ import annotations
+
+from chaotic.providers.base import Chaotic, RestartChaotic, Target
 from chaotic.providers.cloudscale_ch import CloudscaleChChaotic
 from chaotic.providers.cloudstack import CloudStackChaotic
 from chaotic.providers.digitalocean import DigitaloceanChaotic
@@ -17,5 +19,7 @@ __all__ = [
     "HcloudChaotic",
     "NomadChaotic",
     "ProxmoxChaotic",
+    "RestartChaotic",
+    "Target",
     "VultrChaotic",
 ]

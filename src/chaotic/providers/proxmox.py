@@ -1,14 +1,38 @@
+"""Proxmox VE provider.
+
+Requires ``PROXMOX_API_HOST`` plus one of two authentication styles:
+
+* user and password: ``PROXMOX_API_USER=root@pam`` and ``PROXMOX_API_PASSWORD``
+* API token: ``PROXMOX_API_USER=api@pam!myTokenName`` and ``PROXMOX_API_TOKEN``
+"""
+
+from __future__ import annotations
+
 import os
+from collections.abc import Sequence
 from functools import cached_property
-import random
-import time
+from typing import Any
 
 from proxmoxer import ProxmoxAPI
 
-from chaotic.providers.base import Chaotic
+from chaotic.errors import ConfigError
 from chaotic.log import log
+from chaotic.providers.base import RestartChaotic, Target
 
-class ProxmoxChaotic(Chaotic):
+LXC_TYPE = "lxc"
+RUNNING_STATUS = "running"
+TAG_SEPARATOR = ";"
+
+
+def _tags(vm: dict[str, Any]) -> list[str]:
+    """Split a Proxmox resource's ``tags`` field into a list."""
+    return [tag for tag in (vm.get("tags") or "").split(TAG_SEPARATOR) if tag]
+
+
+class ProxmoxChaotic(RestartChaotic):
+    """Shut down and start a random running VM or container."""
+
+    target_noun = "VM"
 
     @cached_property
     def client(self) -> ProxmoxAPI:
@@ -25,103 +49,81 @@ class ProxmoxChaotic(Chaotic):
         # compatibility with existing deployments.
         verify_ssl = bool(os.getenv("PROXMOX_API_VERIFY_SSL", ""))
 
-        if '!' in user:
+        if "!" in user:
             log.info("Using API token authentication")
-
             if not token:
-                raise ValueError("token must be set when using token authentication")
-
+                raise ConfigError("PROXMOX_API_TOKEN must be set when using token authentication")
             if password:
-                raise ValueError("password must NOT be set when using token authentication")
-
-            log.debug(f"Proxmox API token: {token[0:3]}***")
-            token_name: str = user.split('!')[1]
-            proxmox_api_user = user.split('!')[0]
+                raise ConfigError("PROXMOX_API_PASSWORD must NOT be set when using token authentication")
+            api_user, _, token_name = user.partition("!")
         else:
             log.info("Using user/password authentication")
             if not password:
-                raise ValueError("password must be set when not using token authentication")
-
+                raise ConfigError("PROXMOX_API_PASSWORD must be set when not using token authentication")
             if token:
-                raise ValueError("token must NOT be set when not using token authentication")
+                raise ConfigError("PROXMOX_API_TOKEN must NOT be set when not using token authentication")
+            api_user, token_name = user, ""
 
-            log.debug(f"Proxmox password: {password[0:3]}***")
-            token_name: str = None
-            proxmox_api_user = user
-
-        log.info(f"Proxmox host: {host}")
-        log.info(f"Proxmox user: {proxmox_api_user}")
-        log.info(f"Proxmox verify SSL: {verify_ssl}")
-
+        log.info("Proxmox host: %s", host)
+        log.info("Proxmox user: %s", api_user)
+        log.info("Proxmox verify SSL: %s", verify_ssl)
         log.info("Connecting to Proxmox API")
 
         return ProxmoxAPI(
             host=host,
-            user=proxmox_api_user,
+            user=api_user,
             password=password or None,
-            token_name=token_name,
+            token_name=token_name or None,
             token_value=token or None,
-            verify_ssl=verify_ssl
+            verify_ssl=verify_ssl,
         )
 
-    def action(self) -> None:
-        available_vms: list = self.client.cluster.resources.get(type='vm')
+    def _status(self, vm: dict[str, Any]) -> Any:
+        """Return the ``status`` endpoint for a VM, regardless of its type."""
+        node = self.client.nodes(vm["node"])
+        guest = node.lxc(vm["vmid"]) if vm["type"] == LXC_TYPE else node.qemu(vm["vmid"])
+        return guest.status
 
-        denylist: list = self.configs.get('denylist') or []
-        skip_tag: str = self.configs.get('skip_tag')
-        filter_tag: str = self.configs.get('filter_tag')
+    def list_targets(self) -> Sequence[Target]:
+        denylist = self.configs.get("denylist") or []
+        skip_tag = self.configs.get("skip_tag")
+        filter_tag = self.configs.get("filter_tag")
 
-        vms = list()
-        for vm in available_vms:
-            if filter_tag and ('tags' not in vm or filter_tag not in vm['tags'].split(';')):
-                log.debug(f"VM {vm['name']} does not have filter_tag '{filter_tag}', skipping")
+        targets: list[Target] = []
+        for vm in self.client.cluster.resources.get(type="vm") or []:
+            tags = _tags(vm)
+
+            if filter_tag and filter_tag not in tags:
+                log.debug("VM %s does not have filter_tag '%s', skipping", vm["name"], filter_tag)
                 continue
-            if vm['status'] != "running":
-                log.debug(f"VM {vm['name']} not running, skipping")
+            if vm["status"] != RUNNING_STATUS:
+                log.debug("VM %s not running, skipping", vm["name"])
                 continue
-            if vm['name'] in denylist:
-                log.debug(f"VM {vm['name']} in denylist, skipping")
+            if vm["name"] in denylist:
+                log.debug("VM %s in denylist, skipping", vm["name"])
                 continue
-            if skip_tag and 'tags' in vm and skip_tag in vm['tags'].split(';'):
-                log.debug(f"VM {vm['name']} has skip_tag '{skip_tag}', skipping")
+            if skip_tag and skip_tag in tags:
+                log.debug("VM %s has skip_tag '%s', skipping", vm["name"], skip_tag)
                 continue
-            vms.append(vm)
 
-        if vms:
-            vm: dict = random.choice(vms)
-            log.info(f"Choose VM id={vm['vmid']}, name={vm['name']} on node={vm['node']}")
-            log.debug(f"VM info: {vm}")
+            targets.append(Target(id=str(vm["vmid"]), name=vm["name"], raw=vm))
 
-            min_uptime = self.configs.get('min_uptime')
-            if min_uptime is not None:
-                if vm['type'] == 'lxc':
-                    current = self.client.nodes(vm['node']).lxc(vm['vmid']).status.current.get()
-                else:
-                    current = self.client.nodes(vm['node']).qemu(vm['vmid']).status.current.get()
-                required_uptime = min_uptime * 60
-                if current['uptime'] < required_uptime:
-                    log.info(f"VM {vm['name']} required uptime lower then {min_uptime} min: {current['uptime'] / 60:.2f}, skipping")
-                    log.info(f"done")
-                    return
+        return targets
 
-            if not self.dry_run:
-                log.info(f"Stopping VM {vm['name']}")
-                if vm['type'] == 'lxc':
-                    self.client.nodes(vm['node']).lxc(vm['vmid']).status.shutdown.post(forceStop=1)
-                else:
-                    self.client.nodes(vm['node']).qemu(vm['vmid']).status.shutdown.post(forceStop=1)
+    def skip_reason(self, target: Target) -> str | None:
+        """Spare VMs that have not been up for ``min_uptime`` minutes yet."""
+        min_uptime = self.configs.get("min_uptime")
+        if min_uptime is None:
+            return None
 
-                wait_before_restart = int(self.configs.get('wait_before_restart', 60))
-                log.info(f"Sleeping for {wait_before_restart} seconds")
-                time.sleep(wait_before_restart)
+        log.debug("VM info: %s", target.raw)
+        uptime = self._status(target.raw).current.get()["uptime"]
+        if uptime < min_uptime * 60:
+            return f"uptime {uptime / 60:.2f} min is below the required {min_uptime} min"
+        return None
 
-                log.info(f"Starting VM {vm['name']}")
-                if vm['type'] == 'lxc':
-                    self.client.nodes(vm['node']).lxc(vm['vmid']).status.start.post()
-                else:
-                    self.client.nodes(vm['node']).qemu(vm['vmid']).status.start.post()
+    def stop(self, target: Target) -> None:
+        self._status(target.raw).shutdown.post(forceStop=1)
 
-        else:
-            log.info("No VMs found")
-
-        log.info(f"done")
+    def start(self, target: Target) -> None:
+        self._status(target.raw).start.post()

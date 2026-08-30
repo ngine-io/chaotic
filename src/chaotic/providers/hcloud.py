@@ -1,39 +1,36 @@
+"""Hetzner Cloud provider.
+
+Requires ``HCLOUD_API_TOKEN``.
+"""
+
+from __future__ import annotations
+
 import os
+from collections.abc import Sequence
 from functools import cached_property
-import random
-import time
 
 from hcloud import Client
 
-from chaotic.providers.base import Chaotic
 from chaotic.log import log
+from chaotic.providers.base import RestartChaotic, Target
 
-class HcloudChaotic(Chaotic):
+
+class HcloudChaotic(RestartChaotic):
+    """Power a random Hetzner Cloud server off and on again."""
 
     @cached_property
     def client(self) -> Client:
         """API client, created on first use so that importing stays side effect free."""
         return Client(token=os.getenv("HCLOUD_API_TOKEN", ""))
 
-    def action(self) -> None:
-        label = self.configs.get('label')
-        log.info(f"Querying with label: {label}")
-        servers = self.client.servers.get_all(label_selector=label)
+    def list_targets(self) -> Sequence[Target]:
+        label = self.configs.get("label")
+        log.info("Querying with label: %s", label)
+        servers = self.client.servers.get_all(label_selector=label) or []
+        return [Target(id=str(server.id), name=str(server.name), raw=server) for server in servers]
 
-        if servers:
-            server = random.choice(servers)
-            log.info(f"Choose server {server.name}")
-            if not self.dry_run:
-                log.info(f"Stopping server {server.name}")
-                self.client.servers.power_off(server)
+    def stop(self, target: Target) -> None:
+        self.client.servers.power_off(target.raw)
 
-                wait_before_restart = int(self.configs.get('wait_before_restart', 60))
-                log.info(f"Sleeping for {wait_before_restart} seconds")
-                time.sleep(wait_before_restart)
-
-                log.info(f"Starting server {server.name}")
-                self.client.servers.power_on(server)
-        else:
-            log.info("No servers found")
-
-        log.info(f"done")
+    def start(self, target: Target) -> None:
+        self.client.servers.power_on(target.raw)
