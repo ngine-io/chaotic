@@ -41,6 +41,8 @@ class ProxmoxChaotic(RestartChaotic):
 
     def _build_client(self) -> ProxmoxAPI:
         host = os.getenv("PROXMOX_API_HOST", "")
+        if not host:
+            raise ConfigError("PROXMOX_API_HOST must be set")
         user = os.getenv("PROXMOX_API_USER", "root@pam")
         token = os.getenv("PROXMOX_API_TOKEN", "")
         password = os.getenv("PROXMOX_API_PASSWORD", "")
@@ -56,6 +58,8 @@ class ProxmoxChaotic(RestartChaotic):
             if password:
                 raise ConfigError("PROXMOX_API_PASSWORD must NOT be set when using token authentication")
             api_user, _, token_name = user.partition("!")
+            if not token_name:
+                raise ConfigError("PROXMOX_API_USER must include a token name after '!' when using token authentication")
         else:
             log.info("Using user/password authentication")
             if not password:
@@ -63,7 +67,6 @@ class ProxmoxChaotic(RestartChaotic):
             if token:
                 raise ConfigError("PROXMOX_API_TOKEN must NOT be set when not using token authentication")
             api_user, token_name = user, ""
-
         log.info("Proxmox host: %s", host)
         log.info("Proxmox user: %s", api_user)
         log.info("Proxmox verify SSL: %s", verify_ssl)
