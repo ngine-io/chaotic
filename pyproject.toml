@@ -77,7 +77,7 @@ include = ["src", "tests", "docs", "examples", "mkdocs.yml", "logging.ini", "REA
 [tool.ruff]
 line-length = 120
 target-version = "py310"
-src = ["src"]
+src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = [
@@ -112,6 +112,10 @@ ignore = [
     "DTZ007",
 ]
 
+[tool.ruff.lint.per-file-ignores]
+# Tests assert on naive wall-clock datetimes on purpose, mirroring the runtime behaviour.
+"tests/**" = ["ARG", "DTZ001", "S101", "S105", "S106"]
+
 [tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
@@ -123,7 +127,7 @@ known-first-party = ["chaotic"]
 # --------------------------------------------------------------------------- #
 [tool.mypy]
 python_version = "3.10"
-files = ["src"]
+files = ["src", "tests"]
 strict = true
 warn_unreachable = true
 pretty = true
@@ -132,3 +136,35 @@ pretty = true
 # None of the vendor SDKs ship type information.
 module = ["cloudscale.*", "cs.*", "digitalocean.*", "hcloud.*", "proxmoxer.*", "schedule.*", "truststore.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*"]
+disallow_untyped_defs = false
+disallow_untyped_calls = false
+# Tests reach into modules to monkeypatch their imports, which strict mode's
+# implicit re-export rule would otherwise reject.
+no_implicit_reexport = false
+
+# --------------------------------------------------------------------------- #
+# Tests / coverage
+# --------------------------------------------------------------------------- #
+[tool.pytest.ini_options]
+minversion = "8.0"
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+source = ["chaotic"]
+branch = true
+# Exercised by a subprocess test, which coverage cannot see into.
+omit = ["*/chaotic/__main__.py"]
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "@(abc\\.)?abstractmethod",
+]
