@@ -32,11 +32,11 @@ excludes:
     hit, without calling any mutating API. It is the fastest way to check that
     your filters select what you expect.
 
-## Clouds
+## Cloud Providers
 
 Currently implemented APIs:
 
-| Cloud             | `kind`          | Experiment                     |
+| Providers         | `kind`          | Experiment                     |
 | ----------------- | --------------- | ------------------------------ |
 | Apache CloudStack | `cloudstack`    | Stop and start an instance     |
 | cloudscale.ch     | `cloudscale_ch` | Stop and start a server        |
