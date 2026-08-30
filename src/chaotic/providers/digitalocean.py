@@ -1,5 +1,6 @@
 import random
 import time
+from functools import cached_property
 
 import digitalocean
 
@@ -9,14 +10,15 @@ from chaotic.log import log
 
 class DigitaloceanChaotic(Chaotic):
 
-    def __init__(self) -> None:
-        super().__init__()
-        self.do = digitalocean.Manager()
+    @cached_property
+    def client(self) -> digitalocean.Manager:
+        """API client, created on first use so that importing stays side effect free."""
+        return digitalocean.Manager()
 
     def action(self) -> None:
         tag = self.configs.get('tag')
         log.info(f"Querying with tag: {tag}")
-        droplets = self.do.get_all_droplets(tag_name=tag)
+        droplets = self.client.get_all_droplets(tag_name=tag)
 
         if droplets:
             droplet = random.choice(droplets)

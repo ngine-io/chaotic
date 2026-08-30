@@ -1,4 +1,5 @@
 import os
+from functools import cached_property
 import random
 import time
 
@@ -7,18 +8,15 @@ from cs import CloudStack
 from chaotic.providers.base import Chaotic
 from chaotic.log import log
 
-CLOUDSTACK_API_ENDPOINT: str = os.getenv('CLOUDSTACK_API_ENDPOINT', "")
-CLOUDSTACK_API_KEY: str = os.getenv('CLOUDSTACK_API_KEY', "")
-CLOUDSTACK_API_SECRET: str = os.getenv('CLOUDSTACK_API_SECRET', "")
-
-
 class CloudStackChaotic(Chaotic):
 
-    def __init__(self) -> None:
-        self.cs = CloudStack(
-            endpoint=CLOUDSTACK_API_ENDPOINT,
-            key=CLOUDSTACK_API_KEY,
-            secret=CLOUDSTACK_API_SECRET,
+    @cached_property
+    def client(self) -> CloudStack:
+        """API client, created on first use so that importing stays side effect free."""
+        return CloudStack(
+            endpoint=os.getenv("CLOUDSTACK_API_ENDPOINT", ""),
+            key=os.getenv("CLOUDSTACK_API_KEY", ""),
+            secret=os.getenv("CLOUDSTACK_API_SECRET", ""),
         )
 
     def action(self) -> None:
@@ -28,7 +26,7 @@ class CloudStackChaotic(Chaotic):
 
         log.info(f"Querying with tag: {tag['key']}={tag['value']}")
 
-        instances = self.cs.listVirtualMachines(
+        instances = self.client.listVirtualMachines(
             tags=[tag],
             projectid=self.configs.get('projectid'),
             zoneid=self.configs.get('zoneid'),
@@ -39,13 +37,13 @@ class CloudStackChaotic(Chaotic):
             log.info(f"Choose server {instance['name']}")
             if not self.dry_run:
                 log.info(f"Stopping server {instance['name']}")
-                self.cs.stopVirtualMachine(id=instance['id'])
+                self.client.stopVirtualMachine(id=instance['id'])
                 wait_before_restart = int(self.configs.get('wait_before_restart', 60))
                 log.info(f"Sleeping for {wait_before_restart} seconds")
                 time.sleep(wait_before_restart)
 
                 log.info(f"Starting server {instance['name']}")
-                self.cs.startVirtualMachine(id=instance['id'])
+                self.client.startVirtualMachine(id=instance['id'])
         else:
             log.info("No servers found")
 
