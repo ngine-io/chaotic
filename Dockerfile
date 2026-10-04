@@ -3,7 +3,7 @@
 FROM docker.io/python:3.14.7-slim AS builder
 
 # Pin uv by copying its binary out of the official (scratch based) uv image.
-COPY --from=ghcr.io/astral-sh/uv:0.12.5 /uv /uvx /usr/local/bin/
+COPY --from=ghcr.io/astral-sh/uv:0.12.23 /uv /uvx /usr/local/bin/
 
 ENV UV_COMPILE_BYTECODE=1 \
     UV_LINK_MODE=copy \
