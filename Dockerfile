@@ -1,6 +1,6 @@
 # Build the virtualenv in a throwaway stage, so that neither uv nor the sources
 # end up in the published image.
-FROM docker.io/python:3.14.7-slim AS builder
+FROM docker.io/python:3.14.8-slim AS builder
 
 # Pin uv by copying its binary out of the official (scratch based) uv image.
 COPY --from=ghcr.io/astral-sh/uv:0.12.5 /uv /uvx /usr/local/bin/
@@ -24,7 +24,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-editable --no-dev
 
 
-FROM docker.io/python:3.14.7-slim
+FROM docker.io/python:3.14.8-slim
 
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
